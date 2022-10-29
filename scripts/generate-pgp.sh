@@ -15,10 +15,11 @@ Expire-Date: 0
 %no-protection
 %commit" > /tmp/ppr-pgp-key.batch
 
-mkdir -p /tmp/ppr
-export GNUPGHOME="$(mktemp -d /tmp/ppr/pgpkeys-XXXXXX)"
+mkdir -p "$HOME/.ppr"
+export GNUPGHOME="$(mktemp -d $HOME/.ppr/pgpkeys-XXXXXX)"
 gpg --no-tty --batch --gen-key /tmp/ppr-pgp-key.batch
 gpg --armor --export "PPR" > "$PPR_BASE/ppr.pub"
 gpg --armor --export-secret-keys "PPR" > /tmp/pgp-key.private
 gpg --import /tmp/pgp-key.private
+rm /tmp/pgp-key.private
 cat "$PPR_BASE/dists/pacstall/Release" | gpg --default-key "PPR" -abs --clearsign > "$PPR_BASE/dists/pacstall/InRelease"
