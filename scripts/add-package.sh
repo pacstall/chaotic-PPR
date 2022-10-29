@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 function msg() {
 	echo -e ":: $*"
 }
@@ -39,5 +41,5 @@ for pkg in "${INPUT[@]}"; do
 	cat "$PPR_BASE/dists/stable/main/binary-amd64/Packages" | gzip -9 > "$PPR_BASE/dists/stable/main/binary-amd64/Packages.gz"
 	msg "Updating Release file"
 	cd "$PPR_BASE/dists/stable"
-	"$PPR_BASE/scripts/generate-release.sh" > "Release"
+	"$SCRIPT_DIR/generate-release.sh" > "Release"
 done
