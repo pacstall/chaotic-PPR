@@ -10,3 +10,6 @@ Run `./scripts/init.sh`. This will generate a basic apt repo structure.
 
 #### Adding packages
 Run `./scripts/add-package.sh <list of packages>`.
+
+#### Signing the repo
+Run `./scripts/generate-pgp.sh`.
