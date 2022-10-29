@@ -6,4 +6,4 @@ if [[ -z $PPR_BASE ]]; then
 fi
 
 mkdir -p "$PPR_BASE/pool/main"
-mkdir -p "$PPR_BASE/dists/stable/main/binary-amd64"
+mkdir -p "$PPR_BASE/dists/pacstall/main/binary-amd64"

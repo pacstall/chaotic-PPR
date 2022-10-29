@@ -37,9 +37,9 @@ for pkg in "${INPUT[@]}"; do
 	rm "$pkg.pacscript"
 	rm -r "$BUILD_SITE"
 	cd "$PPR_BASE"
-	dpkg-scanpackages --arch amd64 pool/ > "$PPR_BASE/dists/stable/main/binary-amd64/Packages"
-	cat "$PPR_BASE/dists/stable/main/binary-amd64/Packages" | gzip -9 > "$PPR_BASE/dists/stable/main/binary-amd64/Packages.gz"
+	dpkg-scanpackages --arch amd64 pool/ > "$PPR_BASE/dists/pacstall/main/binary-amd64/Packages"
+	cat "$PPR_BASE/dists/pacstall/main/binary-amd64/Packages" | gzip -9 > "$PPR_BASE/dists/pacstall/main/binary-amd64/Packages.gz"
 	msg "Updating Release file"
-	cd "$PPR_BASE/dists/stable"
+	cd "$PPR_BASE/dists/pacstall"
 	"$SCRIPT_DIR/generate-release.sh" > "Release"
 done
