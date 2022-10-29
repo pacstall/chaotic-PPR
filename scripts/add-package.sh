@@ -26,9 +26,11 @@ for pkg in "${INPUT[@]}"; do
 	pacstall -BPI "$pkg.pacscript"
 	sudo rm -rf "/tmp/pacstall-no-build/$pkg"
 	msg "Built $pkg. Converting to valid deb name"
+	( # So we don't have stray variables from source
 	source "$pkg.pacscript"
 	mv "${pkg}.deb" "${pkg}_${version}-1_amd64.deb"
 	mv "${pkg}_${version}-1_amd64.deb" "$PPR_BASE/pool/main/"
+	)
 	msg "Cleaning up build directory"
 	rm "$pkg.pacscript"
 	rm -r "$BUILD_SITE"
