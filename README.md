@@ -33,4 +33,8 @@ Run
 ```bash
 curl -s localhost:8000/ppr.pub | gpg --dearmor | sudo tee /usr/share/keyrings/ppr.gpg 1> /dev/null
 echo "deb [signed-by=/usr/share/keyrings/ppr.gpg] http://127.0.0.1:8000 pacstall main" | sudo tee /etc/apt/sources.list.d/chaotic-ppr.list
+sudo apt-get update
 ```
+
+#### Consquent runs
+Run `docker-compose up`.
