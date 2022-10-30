@@ -3,6 +3,8 @@ LABEL org.opencontainers.image.description "Chaotic PPR"
 ENV PPR_BASE="/home/pacstall/ppr-base"
 
 COPY scripts/* /home/pacstall/ppr/
+COPY ppr.pub /home/pacstall/ppr/
+COPY private-ppr.txt /var/gpg/
 
 RUN /home/pacstall/ppr/setup.sh
 

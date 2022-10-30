@@ -17,8 +17,8 @@ function do_hash() {
 cat << EOF
 Origin: Pacstall
 Label: Pacstall
-Suite: stable
-Codename: stable
+Suite: pacstall
+Codename: pacstall
 Version: 1.0
 Architectures: amd64
 Components: main
