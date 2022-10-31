@@ -14,7 +14,9 @@ if [[ -f "$PPR_BASE/.init" ]]; then
 else
 	cd "$PPR_BASE"
 	"$SCRIPT_DIR/init.sh"
-	echo "neofetch" > "$PPR_BASE/default-packagelist"
+	if ! [[ -f "$PPR_BASE/default-packagelist" ]]; then
+		echo "neofetch" > "$PPR_BASE/default-packagelist"
+	fi
 	"$SCRIPT_DIR/add-package.sh" --populate
 	"$SCRIPT_DIR/generate-pgp.sh"
 	touch "$PPR_BASE/.init"
