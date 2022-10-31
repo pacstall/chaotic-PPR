@@ -3,6 +3,11 @@ services:
   apt-repo:
     build: .
     ports:
-      - "8000:8000"
+      - "80:8000"
     volumes:
-      - ./ppr-base:/home/pacstall/ppr-base
+      - type: bind
+        source: ${PWD}/ppr-base
+        target: /home/pacstall/ppr-base
+#      - type: bind
+#        source: ${PWD}/private-ppr.txt
+#        target: /var/gpg/

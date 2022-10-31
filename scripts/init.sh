@@ -7,3 +7,4 @@ fi
 
 mkdir -p "$PPR_BASE/pool/main"
 mkdir -p "$PPR_BASE/dists/pacstall/main/binary-amd64"
+touch "$PPR_BASE/.init"

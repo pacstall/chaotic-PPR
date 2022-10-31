@@ -7,10 +7,13 @@ if [[ -z $PPR_BASE ]]; then
 	exit 1
 fi
 
-if [[ -f "$PPR_BASE/ppr.pub" ]]; then
-	true
+if [[ -f "$PPR_BASE/.init" ]]; then
+	cd "$PPR_BASE"
+	python3 -m http.server
 else
+	cd "$PPR_BASE"
 	"$SCRIPT_DIR/init.sh"
 	"$SCRIPT_DIR/add-package.sh" neofetch
 	"$SCRIPT_DIR/generate-pgp.sh"
+	python3 -m http.server
 fi
