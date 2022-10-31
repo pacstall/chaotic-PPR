@@ -14,5 +14,4 @@ WORKDIR /home/pacstall/ppr-base
 USER pacstall
 
 EXPOSE 8000
-#CMD ["python3", "-m", "http.server"]
 CMD ["bash", "/var/ppr/scripts/setup.sh"]
