@@ -9,6 +9,7 @@ fi
 
 if [[ -f "$PPR_BASE/.init" ]]; then
 	cd "$PPR_BASE"
+	echo -e ":: Starting http server"
 	python3 -m http.server
 else
 	cd "$PPR_BASE"
