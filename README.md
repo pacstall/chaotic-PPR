@@ -25,6 +25,9 @@ cp "$PPR_BASE/ppr.pub" "$PWD"
 gpg --armor --export-secret-keys "PPR" > "$PWD/private-ppr.txt"
 ```
 
+#### Setting the default packagelist
+To specify packages to be created on the docker containers first startup, edit the file `$PPR_BASE/default-packagelist`. You must specify valid package names separated by newlines.
+
 #### Creating docker image
 Run:
 ```bash

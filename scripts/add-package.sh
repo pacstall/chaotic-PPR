@@ -11,7 +11,11 @@ if [[ -z $PPR_BASE ]]; then
 	exit 1
 fi
 
-INPUT=("${@:?No input given}")
+if [[ $1 == '--populate' ]]; then
+	readarray -t INPUT < "$PPR_BASE/default-packagelist"
+else
+	INPUT=("${@:?No input given}")
+fi
 
 msg "Adding ${INPUT[*]}"
 

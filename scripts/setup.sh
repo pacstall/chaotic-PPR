@@ -14,7 +14,8 @@ if [[ -f "$PPR_BASE/.init" ]]; then
 else
 	cd "$PPR_BASE"
 	"$SCRIPT_DIR/init.sh"
-	"$SCRIPT_DIR/add-package.sh" neofetch
+	echo "neofetch" > "$PPR_BASE/default-packagelist"
+	"$SCRIPT_DIR/add-package.sh" --populate
 	"$SCRIPT_DIR/generate-pgp.sh"
 	touch "$PPR_BASE/.init"
 	echo -e ":: Starting http server"
