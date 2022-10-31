@@ -16,5 +16,6 @@ else
 	"$SCRIPT_DIR/add-package.sh" neofetch
 	"$SCRIPT_DIR/generate-pgp.sh"
 	touch "$PPR_BASE/.init"
+	echo -e ":: Starting http server"
 	python3 -m http.server
 fi
