@@ -1,8 +1,20 @@
-FROM ghcr.io/pacstall/pacstall:latest
+FROM ubuntu:latest
 LABEL org.opencontainers.image.description "Chaotic PPR"
-ENV TERM='xterm-256color'
 
-RUN sudo apt install inotify-tools -y
+# ENV setup
+ENV TERM='xterm-256color'
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ="Africa/Libreville"
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Install required packages
+RUN apt-get update
+RUN apt-get install sudo inotify-tools gpg -y
+
+# Setup user
+RUN adduser --disabled-password --gecos '' pacstall
+RUN adduser pacstall sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Chaotic PPR scripts
 COPY scripts/* /var/ppr/scripts/
