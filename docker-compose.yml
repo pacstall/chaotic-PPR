@@ -2,9 +2,35 @@ version: "3.9"
 services:
   apt-repo:
     build: .
-    ports:
-      - "80:8000"
+    environment:
+      - PPR_BASE
     volumes:
       - type: bind
-        source: ${PWD}/ppr-base
+        source: ${PPR_BASE}
         target: /home/pacstall/ppr-base
+  web:
+    image: nginx:stable-alpine
+    environment:
+      - PPR_BASE
+    depends_on:
+      - apt-repo
+    volumes:
+      - ${PPR_BASE}:/usr/share/nginx/html
+      - ./nginx-conf/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_PORT=80
+  sftp:
+    image: atmoz/sftp:alpine
+    environment:
+      - PPR_BASE
+    depends_on:
+      - apt-repo
+    env_file:
+      - .env
+    volumes:
+      - ${PPR_BASE}:/home/sftp-pacstall/upload
+    ports:
+      - "420:22"
+    command: sftp-pacstall:${SFTP_PASS}:::upload

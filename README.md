@@ -7,6 +7,12 @@
 #### Setting the base repository location
 First, make sure you have cloned the repo, and you are inside it. Then run `export PPR_BASE=$PWD/ppr-base` and save that somewhere important. Next, run `./scripts/init.sh`.
 
+#### Creating the sftp password
+Edit the file `.env`, and add the following information:
+```bash
+SFTP_PASS="MyComplexPassword"
+```
+
 #### Creating GPG keys
 Run:
 ```bash
@@ -43,6 +49,20 @@ curl -s localhost/ppr.pub | gpg --dearmor | sudo tee /usr/share/keyrings/ppr.gpg
 echo "deb [signed-by=/usr/share/keyrings/ppr.gpg] http://127.0.0.1 pacstall main" | sudo tee /etc/apt/sources.list.d/chaotic-ppr.list
 sudo apt-get update
 ```
+
+#### Adding packages
+When you want to add a deb package from your host system into the PPR, you must build it using `pacstall -PBI`, then rename the package to the following scheme: `${name}_${version}-1_amd64.deb`.
+
+Then run the following to upload:
+```bash
+sshpass -p "password_from_env_file" sftp -P 420 sftp-pacstall@localhost <<EOF
+put /my/super/special.deb /upload/pool/main/
+EOF
+```
+
+The Chaotic PPR will automatically trigger the apt repository metadata rebuild for you.
+
+Then all thats left is to wait for the package to be processed!
 
 #### Consquent runs
 Run `docker-compose up`.

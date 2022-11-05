@@ -2,24 +2,21 @@
 
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-if [[ -z $PPR_BASE ]]; then
-	echo "PPR_BASE not found!"
-	exit 1
-fi
-
-if [[ -f "$PPR_BASE/.init" ]]; then
-	cd "$PPR_BASE"
-	echo -e ":: Starting http server"
-	python3 -m http.server
+if [[ -f "/home/pacstall/ppr-base/.init" ]]; then
+	cd "/home/pacstall/ppr-base/"
+	#echo -e ":: Starting http server"
+	#python3 -m http.server
+	sleep infinity
 else
-	cd "$PPR_BASE"
+	cd "/home/pacstall/ppr-base/"
 	"$SCRIPT_DIR/init.sh"
-	if ! [[ -f "$PPR_BASE/default-packagelist" ]]; then
-		echo "neofetch" > "$PPR_BASE/default-packagelist"
+	if ! [[ -f "/home/pacstall/ppr-base/default-packagelist" ]]; then
+		echo "neofetch" > "/home/pacstall/ppr-base/default-packagelist"
 	fi
 	"$SCRIPT_DIR/add-package.sh" --populate
 	"$SCRIPT_DIR/generate-pgp.sh"
-	touch "$PPR_BASE/.init"
-	echo -e ":: Starting http server"
-	python3 -m http.server
+	touch "/home/pacstall/ppr-base/.init"
+	#echo -e ":: Starting http server"
+	#python3 -m http.server
+	sleep infinity
 fi

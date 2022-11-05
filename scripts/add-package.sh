@@ -6,13 +6,8 @@ function msg() {
 	echo -e ":: $*"
 }
 
-if [[ -z $PPR_BASE ]]; then
-	msg "PPR_BASE variable not found!"
-	exit 1
-fi
-
 if [[ $1 == '--populate' ]]; then
-	readarray -t INPUT < "$PPR_BASE/default-packagelist"
+	readarray -t INPUT < "/home/pacstall/ppr-base/default-packagelist"
 else
 	INPUT=("${@:?No input given}")
 fi
@@ -35,15 +30,15 @@ for pkg in "${INPUT[@]}"; do
 	( # So we don't have stray variables from source
 	source "$pkg.pacscript"
 	mv "${pkg}.deb" "${pkg}_${version}-1_amd64.deb"
-	mv "${pkg}_${version}-1_amd64.deb" "$PPR_BASE/pool/main/"
+	mv "${pkg}_${version}-1_amd64.deb" "/home/pacstall/ppr-base/pool/main/"
 	)
 	msg "Cleaning up build directory"
 	rm "$pkg.pacscript"
 	rm -r "$BUILD_SITE"
-	cd "$PPR_BASE"
-	dpkg-scanpackages --arch amd64 pool/ > "$PPR_BASE/dists/pacstall/main/binary-amd64/Packages"
-	cat "$PPR_BASE/dists/pacstall/main/binary-amd64/Packages" | gzip -9 > "$PPR_BASE/dists/pacstall/main/binary-amd64/Packages.gz"
+	cd "/home/pacstall/ppr-base"
+	dpkg-scanpackages --arch amd64 pool/ > "/home/pacstall/ppr-base/dists/pacstall/main/binary-amd64/Packages"
+	cat "/home/pacstall/ppr-base/dists/pacstall/main/binary-amd64/Packages" | gzip -9 > "/home/pacstall/ppr-base/dists/pacstall/main/binary-amd64/Packages.gz"
 	msg "Updating Release file"
-	cd "$PPR_BASE/dists/pacstall"
+	cd "/home/pacstall/ppr-base/dists/pacstall"
 	"$SCRIPT_DIR/generate-release.sh" > "Release"
 done
