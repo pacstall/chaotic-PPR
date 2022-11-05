@@ -12,6 +12,9 @@ RUN sudo chmod 755 /home/pacstall/ppr-base/
 COPY ppr.pub /home/pacstall/ppr-base/
 COPY private-ppr.txt /var/gpg/
 
+RUN gpg --import /var/gpg/private-ppr.txt
+RUN gpg --import /home/pacstall/ppr-base/ppr.pub
+
 WORKDIR /home/pacstall/ppr-base
 USER pacstall
 
