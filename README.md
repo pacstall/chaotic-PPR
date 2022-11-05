@@ -31,6 +31,7 @@ gpg --no-tty --batch --gen-key /tmp/pgp-key.batch
 gpg --armor --export "PPR" > "$PPR_BASE/ppr.pub"
 cp "$PPR_BASE/ppr.pub" "$PWD"
 gpg --armor --export-secret-keys "PPR" > "$PWD/private-ppr.txt"
+cd "$PPR_BASE"
 ```
 
 #### Setting the default packagelist
