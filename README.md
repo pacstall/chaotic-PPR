@@ -62,7 +62,7 @@ EOF
 
 The Chaotic PPR will automatically trigger the apt repository metadata rebuild for you.
 
-Then all thats left is to wait for the package to be processed!
+Then all that's left is to wait for the package to be processed!
 
 #### Consquent runs
 Run `docker-compose up`.
