@@ -8,6 +8,8 @@ if [[ -f "/home/pacstall/ppr-base/.init" ]]; then
 	#python3 -m http.server
 	sleep infinity
 else
+	mkdir -p "/home/pacstall/ppr-base/pool/main"
+	mkdir -p "/home/pacstall/ppr-base/dists/pacstall/main/binary-amd64"
 	cd "/home/pacstall/ppr-base/"
 	"$SCRIPT_DIR/init.sh"
 	if ! [[ -f "/home/pacstall/ppr-base/default-packagelist" ]]; then

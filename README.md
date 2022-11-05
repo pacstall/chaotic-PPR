@@ -5,7 +5,7 @@
 ### How to create a local instance
 
 #### Setting the base repository location
-First, make sure you have cloned the repo, and you are inside it. Then run `export PPR_BASE=$PWD/ppr-base` and save that somewhere important. Next, run `./scripts/init.sh`.
+First, make sure you have cloned the repo, and you are inside it. Then run `export PPR_BASE=$PWD/ppr-base` and save that somewhere important.
 
 #### Creating the sftp password
 Edit the file `.env`, and add the following information:
