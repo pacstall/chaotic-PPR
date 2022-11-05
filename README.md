@@ -60,7 +60,7 @@ put /my/super/special.deb /upload/main/
 EOF
 ```
 
-The Chaotic PPR will automatically trigger the apt repository metadata rebuild for you.
+The Chaotic PPR will automatically trigger the apt repository metadata rebuild for you, along with cleaning old versions.
 
 Then all that's left is to wait for the package to be processed!
 
