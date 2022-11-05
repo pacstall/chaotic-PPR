@@ -56,7 +56,7 @@ When you want to add a deb package from your host system into the PPR, you must 
 Then run the following to upload:
 ```bash
 sshpass -p "password_from_env_file" sftp -P 420 sftp-pacstall@localhost <<EOF
-put /my/super/special.deb /upload/pool/main/
+put /my/super/special.deb /upload/main/
 EOF
 ```
 

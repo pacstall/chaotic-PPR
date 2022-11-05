@@ -30,7 +30,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ${PPR_BASE}:/home/sftp-pacstall/upload
+      - ${PPR_BASE}/pool:/home/sftp-pacstall/upload
     ports:
       - "420:22"
     command: sftp-pacstall:${SFTP_PASS}:::upload
