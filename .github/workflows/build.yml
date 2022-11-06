@@ -46,6 +46,7 @@ jobs:
           SFTP_PASS: ${{ secrets.sftp }}
         shell: sudo -E -u dio bash {0}
         run: |
+          set -x
           export DEBIAN_FRONTEND=noninteractive
           export GITHUB_ACTIONS=true
           pacstall -D ${BUILD_PACKAGE}
@@ -60,3 +61,4 @@ jobs:
           #EOF
           echo "Built ${BUILD_PACKAGE}_${version}-1_amd64.deb"
           )
+          set +x
