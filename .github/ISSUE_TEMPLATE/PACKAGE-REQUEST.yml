@@ -33,6 +33,17 @@ body:
       label: Why do you think this package should be included?
     validations:
       required: true
+  - type: dropdown
+    id: buildableubuntu
+    attributes:
+      label: Does this package build on the latest Ubuntu LTS?
+      options:
+        - "Yes"
+        - "No"
+        - "Other (Specify in Additional context section)"
+    validations:
+      required: true
+
   - type: input
     id: packagesize
     attributes:
