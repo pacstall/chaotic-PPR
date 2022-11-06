@@ -7,8 +7,6 @@
 <details>
 <summary>How the PPR is structured</summary>
 
-#### How the PPR is structured
-
 ##### Containers
 The PPR uses three docker containers to function:
 
