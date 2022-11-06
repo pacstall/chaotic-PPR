@@ -49,7 +49,8 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           export GITHUB_ACTIONS=true
           pacstall -D ${BUILD_PACKAGE}
-          pacstall -PBI ${BUILD_PACKAGE}.pacscript
+          pacscript_file="${BUILD_PACKAGE}.pacscript"
+          pacstall -PBI "${pacscript_file}"
           (
           source ${BUILD_PACKAGE}.pacscript
           mv "${BUILD_PACKAGE}.deb" "${BUILD_PACKAGE}_${version}-1_amd64.deb"
