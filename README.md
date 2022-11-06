@@ -50,6 +50,7 @@ ssh-keygen -t rsa -b 4096 -f ssh_host_rsa_key < /dev/null
 Run:
 ```bash
 mkdir -p "$PPR_BASE"
+chmod 777 "$PPR_BASE"
 cd "$PPR_BASE" && cd ..
 echo "%echo Generating PPR PGP key
 Key-Type: RSA
