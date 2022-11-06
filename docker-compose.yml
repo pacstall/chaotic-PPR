@@ -11,6 +11,7 @@ services:
     logging:
       options:
         max-size: 10m
+    restart: on-failure:5
   web:
     image: nginx:stable-alpine
     environment:
@@ -27,6 +28,7 @@ services:
     logging:
       options:
         max-size: 10m
+    restart: on-failure:5
   sftp:
     image: atmoz/sftp:alpine
     environment:
@@ -46,3 +48,4 @@ services:
     logging:
       options:
         max-size: 10m
+    restart: on-failure:5
