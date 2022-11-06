@@ -7,6 +7,7 @@ ENV TERM='xterm-256color'
 # Install required packages
 RUN sudo apt-get update
 RUN sudo apt-get install inotify-tools -y
+RUN sudo apt-get remove axel -y
 
 # Chaotic PPR scripts
 COPY scripts/* /var/ppr/scripts/
