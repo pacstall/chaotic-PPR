@@ -17,10 +17,12 @@ jobs:
         env:
           BUILD_PACKAGE: ${{ github.event.issue.title }}
           SFTP_PASS: ${{ secrets.sftp }}
+        shell: sudo -E -u pacstall bash {0}
         run: |
           set -x
           export DEBIAN_FRONTEND=noninteractive
           export GITHUB_ACTIONS=true
+          cd /home/pacstall
           sudo chown -R pacstall:pacstall /tmp/pacstall
           pacstall -D ${BUILD_PACKAGE}
           pacscript_file="$(readlink -f ${BUILD_PACKAGE}.pacscript)"
