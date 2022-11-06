@@ -21,6 +21,7 @@ jobs:
           set -x
           export DEBIAN_FRONTEND=noninteractive
           export GITHUB_ACTIONS=true
+          sudo chown -R pacstall:pacstall /tmp/pacstall
           pacstall -D ${BUILD_PACKAGE}
           pacscript_file="$(readlink -f ${BUILD_PACKAGE}.pacscript)"
           echo -e "Pacscript file is ${pacscript_file}"
