@@ -37,7 +37,7 @@ jobs:
           export GITHUB_ACTIONS=true
           cd /home/pacstall
           sudo chown -R pacstall:pacstall /tmp/pacstall
-          pacstall -D ${BUILD_PACKAGE}
+          pacstall -D ${BUILD_PACKAGE} || exit 1
           pacscript_file="$(readlink -f ${BUILD_PACKAGE}.pacscript)"
           echo -e "Pacscript file is ${pacscript_file}"
           pacstall -PBI "${pacscript_file}"
