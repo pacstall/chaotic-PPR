@@ -4,6 +4,9 @@
 
 ### How to create a local instance
 
+<details>
+<summary>How the PPR is structured</summary>
+
 #### How the PPR is structured
 
 ##### Containers
@@ -25,6 +28,8 @@ The PPR uses three docker containers to function:
 * `setup.sh` is in charge of setting up the initial repository and is an entrypoint that the `apt-repo` container will run on startup. If the repository has not been initialized, it will create one, and if it has, it will run `wait.sh`.
 
 * `wait.sh` will detect modification, moves, creations, and deletions of files in `$PPR_BASE/pool/main/`, and will update the repository metadata and trigger `rm-old.sh`.
+
+</details>
 
 #### Setting the base repository location
 First, make sure you have cloned the repo, and you are inside it. Then run `export PPR_BASE=$PWD/ppr-base` and save that somewhere important.
