@@ -20,6 +20,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install openssh-client sshpass -y
+          sudo apt-get remove axel -y
       - name: Add PPR keyring to system
         shell: sudo -E -u pacstall bash {0}
         run: |
