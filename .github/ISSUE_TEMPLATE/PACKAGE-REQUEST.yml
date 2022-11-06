@@ -1,0 +1,45 @@
+name: Package Request
+description: Suggest a package for inclusion into the PPR
+labels: ["Package Request"]
+assignees:
+  - Henryws
+  - wizard-28
+body:
+  - type: input
+    id: packagename
+    attributes:
+      label: What is the Pacstall package name
+      description: The package name that is in the pacstall repository
+      placeholder: shfmt-bin...
+    validations:
+      required: true
+  - type: dropdown
+    id: pacdeps
+    attributes:
+      label: Pacdeps
+      description: Does this package rely on Pacdeps?
+      options:
+        - Yes
+        - No (Default)
+  - type: input
+    id: pacdeps-listing
+    attributes:
+      label: What Pacdeps does this package rely on (if any)?
+      description: List the package names
+      placeholder: pipewire, brave-keyring-deb
+  - type: textarea
+    id: why
+    attributes:
+      label: Why do you think this package should be included?
+    validations:
+      required: true
+  - type: input
+    id: packagesize
+    attributes:
+      label: What is the size of the built deb?
+      description: We need this to make sure the package you want to include is manageable for us
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other information you have about this package.
