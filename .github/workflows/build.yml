@@ -21,6 +21,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install openssh-client sshpass -y
       - name: Add PPR keyring to system
+        shell: sudo -E -u pacstall bash {0}
         run: |
           ssh-keyscan -p 420 -H pacstall.dev >> ~/.ssh/known_hosts
       - name: Building Package
