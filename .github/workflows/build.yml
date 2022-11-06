@@ -24,7 +24,7 @@ jobs:
         run: |
           dpkg --add-architecture i386
           apt-get update
-          apt-get install apt-utils curl bash wget git sudo iputils-ping keyboard-configuration lsb-release desktop-file-utils sshpass sftp openssh-client -y
+          apt-get install apt-utils curl bash wget git sudo iputils-ping keyboard-configuration lsb-release desktop-file-utils sshpass openssh-client -y
           ln -fs /usr/share/zoneinfo/Africa/Libreville /etc/localtime
       - name: Setup User
         run: |
