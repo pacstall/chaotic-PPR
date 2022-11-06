@@ -19,8 +19,8 @@ body:
       label: Pacdeps
       description: Does this package rely on Pacdeps?
       options:
-        - Yes
-        - No (Default)
+        - "Yes"
+        - "No (Default)"
   - type: input
     id: pacdeps-listing
     attributes:
