@@ -6,7 +6,7 @@ services:
       - PPR_BASE
     volumes:
       - type: bind
-        source: ${PPR_BASE}
+        source: ${PPR_BASE:?Set the variable PPR_BASE}
         target: /home/pacstall/ppr-base
     logging:
       options:
