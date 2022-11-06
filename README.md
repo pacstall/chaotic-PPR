@@ -4,6 +4,28 @@
 
 ### How to create a local instance
 
+#### How the PPR is structured
+
+##### Containers
+The PPR uses three docker containers to function:
+
+* The `apt-repo` container, which is in charge of holding the repo contents, and generating the repo metadata.
+
+* The `web` container which is an nginx server for viewing the repository. It is available on port `80`.
+
+* The `sftp` container which is in charge of modifying the repository, primarily uploading packages to the server. It is available on port `420`.
+
+##### Scripts
+* `add-package.sh` is in charge of building the default packagelist into the repository on first run.
+
+* `generate-release.sh` is in charge of generating the `Release` file structure, including checksums of packages.
+
+* `rm-old.sh` is in charge of finding and removing old packages from the repository.
+
+* `setup.sh` is in charge of setting up the initial repository and is an entrypoint that the `apt-repo` container will run on startup. If the repository has not been initialized, it will create one, and if it has, it will run `wait.sh`.
+
+* `wait.sh` will detect modification, moves, creations, and deletions of files in `$PPR_BASE/pool/main/`, and will update the repository metadata and trigger `rm-old.sh`.
+
 #### Setting the base repository location
 First, make sure you have cloned the repo, and you are inside it. Then run `export PPR_BASE=$PWD/ppr-base` and save that somewhere important.
 
@@ -34,8 +56,8 @@ gpg --armor --export-secret-keys "PPR" > "$PWD/private-ppr.txt"
 cd "$PPR_BASE"
 ```
 
-#### Setting the default packagelist
-To specify packages to be created on the docker containers first startup, edit the file `$PPR_BASE/default-packagelist`. You must specify valid package names separated by newlines.
+#### Setting the default packagelist (*optional*)
+To specify packages to be created on the docker containers first startup, edit the file `$PPR_BASE/default-packagelist`. You must specify valid package names separated by newlines. If you do not specify any packages to be added, the PPR will add `neofetch` by default.
 
 #### Creating docker image
 Run:
@@ -65,5 +87,5 @@ The Chaotic PPR will automatically trigger the apt repository metadata rebuild f
 
 Then all that's left is to wait for the package to be processed!
 
-#### Consquent runs
+#### Subsequent runs
 Run `docker-compose up`.

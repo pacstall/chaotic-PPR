@@ -13,7 +13,7 @@ else
 		echo "neofetch" > "/home/pacstall/ppr-base/default-packagelist"
 	fi
 	"$SCRIPT_DIR/add-package.sh" --populate
-	"$SCRIPT_DIR/generate-pgp.sh"
+	cat "/home/pacstall/ppr-base/dists/pacstall/Release" | gpg --default-key "PPR" -abs --clearsign > "/home/pacstall/ppr-base/dists/pacstall/InRelease"
 	touch "/home/pacstall/ppr-base/.init"
 	"$SCRIPT_DIR/wait.sh"
 fi
