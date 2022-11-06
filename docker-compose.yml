@@ -37,6 +37,9 @@ services:
       - .env
     volumes:
       - ${PPR_BASE}/pool:/home/sftp-pacstall/upload
+      - ${PWD}/sftp-keys/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+      - ${PWD}/sftp-keys/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
+      - ${PWD}/sftp-keys/share:/home/foo/share
     ports:
       - "420:22"
     command: sftp-pacstall:${SFTP_PASS}:::upload

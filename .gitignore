@@ -4,3 +4,4 @@ ppr.pub
 ppr-base/
 private-ppr.txt
 .env
+sftp-keys/

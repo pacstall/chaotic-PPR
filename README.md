@@ -39,6 +39,14 @@ Edit the file `.env`, and add the following information:
 ```bash
 SFTP_PASS="MyComplexPassword"
 ```
+#### Creating the SSH keys
+In order to prevent the `sftp` container from regenerating ssh keys every time it starts, we must provide our own. This can also be used to verify the servers authenticity. Run:
+```bash
+mkdir -p sftp-keys/share/
+cd sftp-keys/
+ssh-keygen -t ed25519 -f ssh_host_ed25519_key < /dev/null
+ssh-keygen -t rsa -b 4096 -f ssh_host_rsa_key < /dev/null
+```
 
 #### Creating GPG keys
 Run:
@@ -60,7 +68,6 @@ cp "$PPR_BASE/ppr.pub" "$PWD"
 gpg --armor --export-secret-keys "PPR" > "$PWD/private-ppr.txt"
 cd "$PPR_BASE"
 ```
-
 #### Setting the default packagelist (*optional*)
 To specify packages to be created on the docker containers first startup, edit the file `$PPR_BASE/default-packagelist`. You must specify valid package names separated by newlines. If you do not specify any packages to be added, the PPR will add `neofetch` by default.
 
