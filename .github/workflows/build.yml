@@ -11,43 +11,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:latest
-      env:
-        TERM: xterm
-        shell: bash
-        USER: dio
-        LOGNAME: dio
-        DEBIAN_FRONTEND: noninteractive
-
+      image: ghcr.io/pacstall/pacstall:latest
     steps:
-      - name: Install System Utilities
-        run: |
-          dpkg --add-architecture i386
-          apt-get update
-          apt-get install apt-utils curl bash wget git sudo iputils-ping keyboard-configuration lsb-release desktop-file-utils sshpass openssh-client -y
-          ln -fs /usr/share/zoneinfo/Africa/Libreville /etc/localtime
-      - name: Setup User
-        run: |
-          useradd -rm -d /home/$USER -s /bin/bash -g root -G sudo -u 1001 $USER
-          sudo sed -i "s/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL) NOPASSWD:ALL/g" /etc/sudoers
-          chown -R $USER /tmp
-          chmod -R 777 /tmp
-      - name: Installing Pacstall
-        run: |
-          export SUDO_USER=dio
-          curl -fsSL https://git.io/JsADh > pacstall-install.sh
-          chmod +x ./pacstall-install.sh
-          echo N\n | sudo -E ./pacstall-install.sh
-          rm ./pacstall-install.sh
-        shell: sudo -E -u dio bash {0}
       - name: Building Package
         env:
           BUILD_PACKAGE: ${{ github.event.issue.title }}
           SFTP_PASS: ${{ secrets.sftp }}
-        shell: sudo -E -u dio bash {0}
         run: |
           set -x
-          cd /home/dio
           export DEBIAN_FRONTEND=noninteractive
           export GITHUB_ACTIONS=true
           pacstall -D ${BUILD_PACKAGE}
