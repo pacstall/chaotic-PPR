@@ -66,7 +66,6 @@ gpg --no-tty --batch --gen-key /tmp/pgp-key.batch
 gpg --armor --export "PPR" > "$PPR_BASE/ppr.pub"
 cp "$PPR_BASE/ppr.pub" "$PWD"
 gpg --armor --export-secret-keys "PPR" > "$PWD/private-ppr.txt"
-cd "$PPR_BASE"
 ```
 #### Setting the default packagelist (*optional*)
 To specify packages to be created on the docker containers first startup, edit the file `$PPR_BASE/default-packagelist`. You must specify valid package names separated by newlines. If you do not specify any packages to be added, the PPR will add `neofetch` by default.
