@@ -28,7 +28,7 @@ jobs:
           ln -fs /usr/share/zoneinfo/Africa/Libreville /etc/localtime
       - name: Setup User
         run: |
-          useradd -rm -d /home/$USER -s /bin/bash -g root -G sudo -u 1001 USER
+          useradd -rm -d /home/$USER -s /bin/bash -g root -G sudo -u 1001 $USER
           sudo sed -i "s/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL) NOPASSWD:ALL/g" /etc/sudoers
           chown -R $USER /tmp
           chmod -R 777 /tmp
