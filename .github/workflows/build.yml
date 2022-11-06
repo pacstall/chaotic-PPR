@@ -44,6 +44,7 @@ jobs:
         env:
           BUILD_PACKAGE: ${{ github.event.issue.title }}
           SFTP_PASS: ${{ secrets.sftp }}
+        shell: sudo -E -u dio bash {0}
         run: |
           export DEBIAN_FRONTEND=noninteractive
           export GITHUB_ACTIONS=true
