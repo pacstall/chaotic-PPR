@@ -23,7 +23,7 @@ jobs:
       - name: Add PPR keyring to system
         shell: sudo -E -u pacstall bash {0}
         run: |
-          ssh-keyscan -p 420 -H pacstall.dev >> ~/.ssh/known_hosts
+          ssh-keyscan -p 420 -H pacstall.dev >> /home/pacstall/.ssh/known_hosts
       - name: Building Package
         env:
           BUILD_PACKAGE: ${{ github.event.inputs.PackageName }}
