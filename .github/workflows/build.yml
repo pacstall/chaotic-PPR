@@ -47,6 +47,7 @@ jobs:
         shell: sudo -E -u dio bash {0}
         run: |
           set -x
+          cd /home/dio
           export DEBIAN_FRONTEND=noninteractive
           export GITHUB_ACTIONS=true
           pacstall -D ${BUILD_PACKAGE}
