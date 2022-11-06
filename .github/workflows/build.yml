@@ -1,7 +1,7 @@
 name: Package Builder
 on:
   issues:
-    type: [opened]
+    types: [opened]
 
 defaults:
   run:
