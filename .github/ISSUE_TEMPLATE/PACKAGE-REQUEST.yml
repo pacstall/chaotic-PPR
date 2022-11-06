@@ -37,10 +37,11 @@ body:
     id: buildableubuntu
     attributes:
       label: Does this package build on the latest Ubuntu LTS?
+      description: This includes dependencies, optional dependencies, and pacdeps
       options:
         - "Yes"
         - "No"
-        - "Other (Specify in Additional context section)"
+        - "Sort of (Specify in Additional context section)"
     validations:
       required: true
 
