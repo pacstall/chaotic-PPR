@@ -2,6 +2,9 @@ name: Package Builder
 on:
   workflow_dispatch:
     inputs:
+      id:
+        description: 'Run identifier'
+        required: false
       PackageName:
         description: "Package to be created"
         required: true
@@ -11,6 +14,12 @@ defaults:
     shell: bash
 
 jobs:
+  id:
+    name: Workflow ID Provider
+    runs-on: ubuntu-latest
+    steps:
+      - name: ${{github.event.inputs.id}}
+        run: echo run identifier ${{ inputs.id }}
   build:
     runs-on: ubuntu-latest
     container:
