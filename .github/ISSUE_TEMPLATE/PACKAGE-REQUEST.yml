@@ -37,7 +37,7 @@ body:
     id: buildableubuntu
     attributes:
       label: Does this package build on the latest Ubuntu LTS?
-      description: This includes dependencies, optional dependencies, and pacdeps
+      description: This includes dependencies, all optional dependencies, and pacdeps
       options:
         - "Yes"
         - "No"
@@ -49,7 +49,7 @@ body:
     id: packagesize
     attributes:
       label: What is the size of the built deb?
-      description: We need this to make sure the package you want to include is manageable for us
+      description: We need this to make sure the package you want to include is manageable for us. Build the deb with `pacstall -BI pkg`, then run `stat --printf="%s\n" pkg.deb | numfmt --to=iec` and paste the output here.
   - type: textarea
     id: context
     attributes:
