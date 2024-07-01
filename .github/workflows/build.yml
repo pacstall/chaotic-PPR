@@ -50,12 +50,7 @@ jobs:
           pacscript_file="$(readlink -f ${BUILD_PACKAGE}.pacscript)"
           echo -e "Pacscript file is ${pacscript_file}"
           pacstall -PBI "${pacscript_file}"
-          (
-          source ${BUILD_PACKAGE}.pacscript
-          mv "${BUILD_PACKAGE}.deb" "${BUILD_PACKAGE}_${version}-1_amd64.deb"
           sshpass -p "${SFTP_PASS}" sftp -P 420 sftp-pacstall@pacstall.dev <<EOF
-          put $(readlink -f ${BUILD_PACKAGE}_${version}-1_amd64.deb) /upload/main/
+          put $(readlink -f ./*.deb) /upload/main/
           EOF
-          #echo "Built ${BUILD_PACKAGE}_${version}-1_amd64.deb"
-          )
           set +x
