@@ -16,6 +16,7 @@ services:
     image: nginx:stable-alpine
     environment:
       - PPR_BASE
+      - NGINX_PORT=80
     depends_on:
       - apt-repo
     volumes:
@@ -23,8 +24,6 @@ services:
       - ./nginx-conf/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "80:80"
-    environment:
-      - NGINX_PORT=80
     logging:
       options:
         max-size: 10m
