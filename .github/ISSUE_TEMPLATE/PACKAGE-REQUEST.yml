@@ -1,10 +1,18 @@
 name: Package Request
+title: "Request: "
 description: Suggest a package for inclusion into the PPR
 labels: ["Package Request"]
 assignees:
   - Elsie19
   - wizard-28
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filling out this form! Please take note of a couple rules we have for the PPR:
+        1. We will only include high quality packages that are consistently updated by their maintainers.
+        2. We will not include packages that are trivial to compile (less than a couple seconds).
+        3. There should be a need for a package to be precompiled. We will not include packages *just because*.
   - type: input
     id: packagename
     attributes:
