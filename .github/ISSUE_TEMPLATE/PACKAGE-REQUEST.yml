@@ -2,14 +2,14 @@ name: Package Request
 description: Suggest a package for inclusion into the PPR
 labels: ["Package Request"]
 assignees:
-  - Henryws
+  - Elsie19
   - wizard-28
 body:
   - type: input
     id: packagename
     attributes:
       label: What is the Pacstall package name
-      description: The package name that is in the pacstall repository (cannot be a git package)
+      description: The package name that is in the pacstall repository (cannot be a git or deb package)
       placeholder: shfmt-bin...
     validations:
       required: true
@@ -20,7 +20,6 @@ body:
       description: Does this package rely on Pacdeps?
       options:
         - "Yes"
-        - "No (Default)"
   - type: input
     id: pacdeps-listing
     attributes:
@@ -31,6 +30,7 @@ body:
     id: why
     attributes:
       label: Why do you think this package should be included?
+      placeholder: I think this package would be useful to the PPR for it's popularity and so on and so forth...
     validations:
       required: true
   - type: dropdown
