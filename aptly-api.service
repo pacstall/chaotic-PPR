@@ -1,0 +1,12 @@
+[Unit]
+Description=Aptly API Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/aptly api serve -listen=:8088
+WorkingDirectory=/home/${USER}/.aptly
+User=${USER}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
