@@ -1,15 +1,23 @@
 name: Package Request
+title: "Request: "
 description: Suggest a package for inclusion into the PPR
 labels: ["Package Request"]
 assignees:
-  - Henryws
+  - Elsie19
   - wizard-28
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filling out this form! Please take note of a couple rules we have for the PPR:
+        1. We will only include high quality packages that are consistently updated by their maintainers.
+        2. We will not include packages that are trivial to compile (less than a couple seconds).
+        3. There should be a need for a package to be precompiled. We will not include packages *just because*.
   - type: input
     id: packagename
     attributes:
       label: What is the Pacstall package name
-      description: The package name that is in the pacstall repository
+      description: The package name that is in the pacstall repository (cannot be a git or deb package)
       placeholder: shfmt-bin...
     validations:
       required: true
@@ -20,7 +28,6 @@ body:
       description: Does this package rely on Pacdeps?
       options:
         - "Yes"
-        - "No (Default)"
   - type: input
     id: pacdeps-listing
     attributes:
@@ -31,13 +38,14 @@ body:
     id: why
     attributes:
       label: Why do you think this package should be included?
+      placeholder: I think this package would be useful to the PPR for it's popularity and so on and so forth...
     validations:
       required: true
   - type: dropdown
     id: buildableubuntu
     attributes:
       label: Does this package build on the latest Ubuntu LTS?
-      description: This includes dependencies, optional dependencies, and pacdeps
+      description: This includes dependencies, all optional dependencies, and pacdeps
       options:
         - "Yes"
         - "No"
@@ -49,7 +57,7 @@ body:
     id: packagesize
     attributes:
       label: What is the size of the built deb?
-      description: We need this to make sure the package you want to include is manageable for us
+      description: We need this to make sure the package you want to include is manageable for us. Build the deb with `pacstall -BI pkg`, then run `stat --printf="%s\n" pkg.deb | numfmt --to=iec` and paste the output here.
   - type: textarea
     id: context
     attributes:
