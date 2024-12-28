@@ -28,9 +28,9 @@ sudo cp apache2/aptly.conf /etc/apache2/sites-available/aptly.conf
 sudo a2ensite aptly.conf
 sudo systemctl reload apache2
 sudo systemctl enable apache2 --now
-sudo certbot --apache -d ppr.pacstall.dev
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
+sudo certbot --apache -d ppr.pacstall.dev
 
 # set up aptly repos
 ./scripts/creator.sh
