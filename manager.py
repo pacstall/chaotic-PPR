@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import sys
 import yaml
@@ -123,7 +125,7 @@ def gen_workflows():
                                 f"curl -X POST -F file=@out/${{{{ env.DEBNAME }}}} \"http://localhost:${{LOCAL_PORT}}/api/files/${{{{ matrix.distro }}}}\"\n"
                                 f"curl -s -X POST -H 'Content-Type: application/json' \\\n"
                                 f"  \"http://localhost:${{LOCAL_PORT}}/api/repos/ppr-${{{{ matrix.distro }}}}/file/${{{{ matrix.distro }}}}?forceReplace=1\"\n"
-                                f"curl -X PUT -H 'Content-Type: application/json' --data '{{\"Signing\": {{\"Skip\": true}}, \"MultiDist\": true, \"ForceOverwrite\": true}}' \"http://localhost:${{LOCAL_PORT}}/api/publish/pacstall/pacstall\"\n"
+                                f"curl -X PUT -H 'Content-Type: application/json' --data '{{\"Signing\": {{\"Skip\": false, \"GpgKey\": \"${{{{ secrets.GPG_KEY }}}}\"}}, \"MultiDist\": true, \"ForceOverwrite\": true}}' \"http://localhost:${{LOCAL_PORT}}/api/publish/pacstall/pacstall\"\n"
                             )
                         }
                     ]
@@ -181,7 +183,7 @@ def add_or_update_package(name, distros, architectures):
 
 def main():
     valid_distros = [
-        "ubuntu-latest", "ubuntu-rolling", "ubuntu-devel",
+        "main", "ubuntu-latest", "ubuntu-rolling", "ubuntu-devel",
         "debian-stable", "debian-testing", "debian-unstable"
     ]
     

@@ -7,9 +7,9 @@ jobs:
     strategy:
       matrix:
         include:
-        - distro: ubuntu-latest
+        - distro: main
           architecture: amd64
-        - distro: ubuntu-latest
+        - distro: main
           architecture: arm64
     steps:
     - name: Init
@@ -45,4 +45,4 @@ jobs:
         curl -X POST -F file=@out/${{ env.DEBNAME }} "http://localhost:${LOCAL_PORT}/api/files/${{ matrix.distro }}"
         curl -s -X POST -H 'Content-Type: application/json' \
           "http://localhost:${LOCAL_PORT}/api/repos/ppr-${{ matrix.distro }}/file/${{ matrix.distro }}?forceReplace=1"
-        curl -X PUT -H 'Content-Type: application/json' --data '{"Signing": {"Skip": true}, "MultiDist": true, "ForceOverwrite": true}' "http://localhost:${LOCAL_PORT}/api/publish/pacstall/pacstall"
+        curl -X PUT -H 'Content-Type: application/json' --data '{"Signing": {"Skip": false, "GpgKey": "${{ secrets.GPG_KEY }}"}, "MultiDist": true, "ForceOverwrite": true}' "http://localhost:${LOCAL_PORT}/api/publish/pacstall/pacstall"

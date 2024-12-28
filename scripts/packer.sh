@@ -76,10 +76,13 @@ packer() {
     echo "${arch} is not a supported architecture by ${pkg}."
     exit 1
   fi
-  if [[ ${dist} != @(debian-stable|debian-testing|debian-unstable|ubuntu-latest|ubuntu-rolling|ubuntu-devel) ]]; then
+  if [[ ${dist} != @(main|debian-stable|debian-testing|debian-unstable|ubuntu-latest|ubuntu-rolling|ubuntu-devel) ]]; then
     echo "${dist} is not a supported distro."
-    echo "Valid entries: debian-stable, debian-testing, debian-unstable, ubuntu-latest, ubuntu-rolling, ubuntu-devel"
+    echo "Valid entries: main, debian-stable, debian-testing, debian-unstable, ubuntu-latest, ubuntu-rolling, ubuntu-devel"
     exit 1
+  fi
+  if [[ "${dist}" == "main" ]]; then
+    dist="ubuntu-latest"
   fi
   if [[ ${arch} != "any" ]]; then
     archarr=("${arch}")

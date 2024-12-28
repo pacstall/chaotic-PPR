@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 LOCAL_PORT=8088
-distrolist=("ubuntu-latest" "ubuntu-develop" "ubuntu-rolling" "debian-stable" "debian-testing" "debian-unstable")
+distrolist=("main" "ubuntu-latest" "ubuntu-develop" "ubuntu-rolling" "debian-stable" "debian-testing" "debian-unstable")
 archlist=("amd64" "arm64" "source")
 mapfile -t pprlist < <(for i in "${distrolist[@]}"; do echo "{\"Component\": \"${i}\", \"Name\": \"ppr-${i}\"},"; done)
 pprstring="${pprlist[@]}"

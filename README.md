@@ -1,28 +1,56 @@
-![PPR name](https://user-images.githubusercontent.com/58742515/199145376-027e5e44-37a7-4e75-bcaf-84981124dbfd.png)
-
-> The Chaotic PPR is a system where Pacstall builds debs from pacscripts and uploads them to an APT repository, meaning that you can enjoy prebuilt pacstall packages without the build times, and you can even use the Chaotic PPR without Pacstall installed!
-
 ## Setup
 
 Requirements:
 - `aptly`
+- `apache2`
+- `certbot`
+- `python3-certbot-apache`
 
-Installation:
+Jumpstart (only for the main host):
 ```bash
-git clone https://github.com/pacstall/chaotic-ppr
-mkdir -p ~/.aptly
+git clone https://github.com/pacstall/chaotic-PPR.git
+cd chaotic-PPR
 
-sed -i "s/\${USER}/${USER}/g" ppr/aptly-api.service
-sudo cp ppr/aptly-api.service /etc/systemd/system/
+# set up the user for hosting
+mkdir -p ~/.aptly/public
+sed -i "s/\${USER}/${USER}/g" aptly-api.service apache2/aptly.conf
+chmod -R o+r ~/.aptly/public
+chmod o+x ~/
+chmod o+x ~/.aptly
+cp ppr-public-key.asc ~/.aptly/public
+
+# enable and start aptly api
+sudo cp aptly-api.service /etc/systemd/system/
 sudo systemctl enable --now aptly-api
 
-./ppr/scripts/creator.sh
+# enable and start apache forwarding
+sudo cp apache2/aptly.conf /etc/apache2/sites-available/aptly.conf
+sudo a2ensite aptly.conf
+sudo systemctl reload apache2
+sudo systemctl enable apache2 --now
+sudo certbot --apache -d ppr.pacstall.dev
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# set up aptly repos
+./scripts/creator.sh
 ```
-Then, generate a keygen pair and set the `SSH_USER`, `SSH_IP`, and `SSH_KEY` repository secrets in GitHub. The main server is now set up and ready to accept and publish packages.
+Then, set the following repository secrets for GitHub Actions:
+- generate an ssh keygen pair and set `SSH_USER`, `SSH_IP`, and `SSH_KEY`
+- get the `keyid` from `ppr-public-key.asc` and set it to `GPG_KEY`
+
+The main server is now set up and ready to accept and publish packages.
+
+To set up the landing page, create a static build from https://github.com/pacstall/chaotic-ppr-landing, and place the files in `~/.aptly/public`.
+
+Installation (for mirrors):
+```bash
+WIP
+```
 
 ## Management
 
-Currently using `manager.py`. Run `python3 manager.py {command} -h` for usage tips.
+Currently using `manager.py`. Type `python3 manager.py {command} -h` for usage tips.
 ```
 positional arguments:
   {add,remove,list,generate}

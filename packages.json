@@ -1,7 +1,7 @@
 {
     "nushell-bin": {
         "distros": [
-            "ubuntu-latest"
+            "main"
         ],
         "architectures": [
             "amd64",
@@ -10,7 +10,7 @@
     },
     "rhino-pkg-git": {
         "distros": [
-            "ubuntu-latest"
+            "main"
         ],
         "architectures": [
             "all"
