@@ -37,15 +37,15 @@ sudo ufw allow 443/tcp
 ```
 Then, set the following repository secrets for GitHub Actions:
 - generate an ssh keygen pair and set `SSH_USER`, `SSH_IP`, and `SSH_KEY`:
+  - `SSH_USER` - the host user
+  - `SSH_IP` - the IP of the server
+  - `SSH_KEY` - the contents of the generated `ppr_ssh_key` file:
 ```bash
 ssh-keygen -t ed25519 -C "github-actions@ppr" -f ppr_ssh_key < /dev/null
 cat ppr_ssh_key.pub >> ~/.ssh/authorized_keys
 ```
-  - `SSH_USER`: the host user
-  - `SSH_IP`: the IP of the server
-  - `SSH_KEY`: the contents of the generated `ppr_ssh_key` file
 
-- get the `keyid` from `ppr-public-key.asc` and set it to `GPG_KEY`
+- get the `keyid` from `ppr-public-key.asc` and set it to `GPG_KEY`:
 ```bash
 gpg --list-packets ppr-public-key.asc | awk '/keyid: / {print $2}'
 ```
