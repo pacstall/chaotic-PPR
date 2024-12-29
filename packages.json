@@ -8,14 +8,6 @@
             "arm64"
         ]
     },
-    "rhino-pkg-git": {
-        "distros": [
-            "main"
-        ],
-        "architectures": [
-            "all"
-        ]
-    },
     "pacstall": {
         "distros": [
             "main"
