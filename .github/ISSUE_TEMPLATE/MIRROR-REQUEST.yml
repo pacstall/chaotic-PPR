@@ -1,0 +1,62 @@
+name: Mirror Request
+description: Submitting your mirror
+title: '[MIRROR]: '
+labels:
+  - mirror
+assignees:
+  - Elsie19
+  - oklopfer
+body:
+  - type: input
+    id: '0'
+    attributes:
+      label: Mirror URL
+      description: The mirror must be accessible under the slug '/pacstall'.
+      placeholder: https://foo.bar/
+    validations:
+      required: true
+  - type: input
+    id: '3'
+    attributes:
+      label: Mirror country of origin
+      description: Which country is the mirror hosted in?
+      placeholder: USA
+    validations:
+      required: true
+  - type: checkboxes
+    id: '1'
+    attributes:
+      label: Provided architectures
+      description: Which architectures will your mirror be providing?
+      options:
+        - label: amd64
+          required: false
+        - label: arm64
+          required: false
+  - type: checkboxes
+    id: '2'
+    attributes:
+      label: Provided distributions
+      description: Which distributions will your mirror be providing?
+      options:
+        - label: main
+          required: true
+        - label: debian-stable
+          required: false
+        - label: debian-testing
+          required: false
+        - label: debian-unstable
+          required: false
+        - label: ubuntu-develop
+          required: false
+        - label: ubuntu-latest
+          required: false
+        - label: ubuntu-rolling
+          required: false
+  - type: input
+    id: '4'
+    attributes:
+      label: Mirror maintainer email
+      description: Provide the public email for whoever maintains the mirror
+    validations:
+      required: true
