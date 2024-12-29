@@ -15,5 +15,13 @@
         "architectures": [
             "all"
         ]
+    },
+    "pacstall": {
+        "distros": [
+            "main"
+        ],
+        "architectures": [
+            "all"
+        ]
     }
 }

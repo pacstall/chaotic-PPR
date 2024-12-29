@@ -1,0 +1,46 @@
+name: pacstall
+'on':
+- workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+        - distro: main
+          architecture: all
+    steps:
+    - name: Init
+      uses: actions/checkout@v4
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H "${{ secrets.SSH_IP }}" >> ~/.ssh/known_hosts
+    - name: Package
+      run: |
+        mkdir -p out && cd out
+        m_name="pacstall"
+        m_dist="${{ matrix.distro }}"
+        m_arch="${{ matrix.architecture }}"
+        ../scripts/packer.sh "${m_name}" "${m_dist}" "${m_arch}"
+        debfile=(*${m_arch}.deb)
+        echo "DEBNAME=${debfile}" >> $GITHUB_ENV
+    - name: Upload .deb files
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.DEBNAME }}@${{ matrix.distro }}
+        path: out/${{ env.DEBNAME }}
+    - name: Upload to server
+      run: |
+        LOCATION="${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }}"
+        LOCAL_PORT=8080
+        REMOTE_PORT=8088
+        ssh -i ~/.ssh/id_ed25519 -fN -L ${LOCAL_PORT}:localhost:${REMOTE_PORT} "${LOCATION}"
+        curl -X POST -F file=@out/${{ env.DEBNAME }} "http://localhost:${LOCAL_PORT}/api/files/${{ matrix.distro }}"
+        curl -s -X POST -H 'Content-Type: application/json' \
+          "http://localhost:${LOCAL_PORT}/api/repos/ppr-${{ matrix.distro }}/file/${{ matrix.distro }}?forceReplace=1"
+        curl -X PUT -H 'Content-Type: application/json' --data '{"Signing": {"Skip": false, "GpgKey": "${{ secrets.GPG_KEY }}"}, "MultiDist": true, "ForceOverwrite": true}' "http://localhost:${LOCAL_PORT}/api/publish/pacstall/pacstall"
