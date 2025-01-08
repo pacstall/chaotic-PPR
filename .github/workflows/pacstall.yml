@@ -44,9 +44,9 @@ jobs:
         rm_str="$(./scripts/overflow.sh pacstall ${{ matrix.distro }} ${{ matrix.architecture }} 5 ${REPO_URL})"
         if [ -n "${rm_str}" ]; then
           echo "Removing ${rm_str}..."
-          curl -X DELETE -H 'Content-Type: application/json' --data "{\"PackageRefs\": [${rm_str}]}" "${REPO_URL}"
+          curl -X DELETE -H 'Content-Type: application/json' --data "{\"PackageRefs\": [${rm_str}]}" "${REPO_URL}" | jq
         fi
-        curl -X POST -F file=@out/${{ env.DEBNAME }} "http://localhost:${LOCAL_PORT}/api/files/${{ matrix.distro }}"
+        curl -X POST -F file=@out/${{ env.DEBNAME }} "http://localhost:${LOCAL_PORT}/api/files/${{ matrix.distro }}" | jq
         curl -s -X POST -H 'Content-Type: application/json' \
-          "http://localhost:${LOCAL_PORT}/api/repos/ppr-${{ matrix.distro }}/file/${{ matrix.distro }}?forceReplace=1"
-        curl -X PUT -H 'Content-Type: application/json' --data '{"Signing": {"Skip": false, "GpgKey": "${{ secrets.GPG_KEY }}"}, "MultiDist": true, "ForceOverwrite": true}' "http://localhost:${LOCAL_PORT}/api/publish/pacstall/pacstall"
+          "http://localhost:${LOCAL_PORT}/api/repos/ppr-${{ matrix.distro }}/file/${{ matrix.distro }}?forceReplace=1" | jq
+        curl -X PUT -H 'Content-Type: application/json' --data '{"Signing": {"Skip": false, "GpgKey": "${{ secrets.GPG_KEY }}"}, "MultiDist": true, "ForceOverwrite": true}' "http://localhost:${LOCAL_PORT}/api/publish/pacstall/pacstall" | jq
