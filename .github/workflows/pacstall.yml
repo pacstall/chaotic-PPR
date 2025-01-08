@@ -1,6 +1,9 @@
 name: pacstall
 'on':
-- workflow_dispatch
+  repository_dispatch:
+    types:
+    - pacstall
+  workflow_dispatch: {}
 jobs:
   build:
     runs-on: ubuntu-latest
