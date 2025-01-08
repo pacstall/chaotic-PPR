@@ -33,7 +33,7 @@ function check_overflow() {
     done
   fi
   if [[ -n ${removes[*]} ]]; then
-    printf -v remove_ref "'%s'," "${removes[@]}"
+    printf -v remove_ref '\"%s\",' "${removes[@]}"
     echo "${remove_ref%,}"
   fi
 }

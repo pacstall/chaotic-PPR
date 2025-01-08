@@ -43,10 +43,10 @@ jobs:
         REMOTE_PORT=8088
         REPO_URL="http://localhost:${LOCAL_PORT}/api/repos/ppr-${{ matrix.distro }}/packages"
         ssh -i ~/.ssh/id_ed25519 -fN -L ${LOCAL_PORT}:localhost:${REMOTE_PORT} "${LOCATION}"
-        rm_str="$(../scripts/overflow.sh nushell-bin ${{ matrix.distro }} ${{ matrix.architecture }} 5 ${REPO_URL})"
-        if [ -n ${rm_str} ]; then
+        rm_str="$(./scripts/overflow.sh nushell-bin ${{ matrix.distro }} ${{ matrix.architecture }} 5 ${REPO_URL})"
+        if [ -n "${rm_str}" ]; then
           echo "Removing ${rm_str}..."
-          curl -X DELETE -H 'Content-Type: application/json' --data "{'PackageRefs': [${rm_str}]}" "${REPO_URL}"
+          curl -X DELETE -H 'Content-Type: application/json' --data "{\"PackageRefs\": [${rm_str}]}" "${REPO_URL}"
         fi
         curl -X POST -F file=@out/${{ env.DEBNAME }} "http://localhost:${LOCAL_PORT}/api/files/${{ matrix.distro }}"
         curl -s -X POST -H 'Content-Type: application/json' \
