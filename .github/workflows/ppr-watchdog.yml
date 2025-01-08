@@ -45,4 +45,3 @@ jobs:
           branch: watchdog
           title: "Bump timestamps from API"
           body: "${{ env.pr_body }}"
-          update-branch: true
