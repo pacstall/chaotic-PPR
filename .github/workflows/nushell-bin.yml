@@ -1,6 +1,9 @@
 name: nushell-bin
 'on':
-- workflow_dispatch
+  repository_dispatch:
+    types:
+    - nushell-bin
+  workflow_dispatch: {}
 jobs:
   build:
     runs-on: ubuntu-latest

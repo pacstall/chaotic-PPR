@@ -1,0 +1,48 @@
+name: Watchdog
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+jobs:
+  update-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Check for updates from API
+        id: update-json
+        run: |
+          needed=0
+          updates="$(./scripts/checker.sh packages.json updates.json)"
+          if [[ "${updates}" == "No PPR updates found." ]];  then
+            echo "No PPR updates found."
+            echo "needed=0" >> $GITHUB_ENV
+            exit 0
+          else
+            echo "needed=1" >> $GITHUB_ENV
+            echo "pr_body<<EOF" >> $GITHUB_ENV
+            echo "${updates}" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          fi
+
+      - name: Create Pull Request
+        if: env.needed == '1'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          add-paths: updates.json
+          base: master
+          branch: watchdog
+          title: "Bump timestamps from API"
+          body: "${{ env.pr_body }}"
+          update-branch: true

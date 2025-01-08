@@ -68,7 +68,14 @@ def gen_workflows():
 
         workflow_template = {
             "name": f"{package_name}",
-            "on": ["workflow_dispatch"],
+            "on": {
+                "repository_dispatch": {
+                    "types": [
+                        f"{package_name}"
+                    ]
+                },
+                "workflow_dispatch": {}
+            },
             "jobs": {
                 "build": {
                     "runs-on": "ubuntu-latest",
