@@ -18,7 +18,8 @@ def load_database():
 
 def save_database(data):
     with open(DATABASE_FILE, "w") as f:
-        json.dump(data, f, indent=4)
+        json.dump(data, f, indent=2)
+        f.write("\n")
 
 def remove_package(name):
     data = load_database()
@@ -60,6 +61,7 @@ def gen_workflows():
     for package_name, package_data in packages.items():
         distros = package_data["distros"]
         architectures = adjust_architectures(package_data["architectures"])
+        overflow = package_data["maxOverflow"]
 
         matrix_combinations = [
             {"distro": distro, "architecture": arch}
@@ -130,7 +132,7 @@ def gen_workflows():
                                 f"REMOTE_PORT=8088\n"
                                 f"REPO_URL=\"http://localhost:${{LOCAL_PORT}}/api/repos/ppr-${{{{ matrix.distro }}}}/packages\"\n"
                                 f"ssh -i ~/.ssh/id_ed25519 -fN -L ${{LOCAL_PORT}}:localhost:${{REMOTE_PORT}} \"${{LOCATION}}\"\n"
-                                f"rm_str=\"$(./scripts/overflow.sh {package_name} ${{{{ matrix.distro }}}} ${{{{ matrix.architecture }}}} 5 ${{REPO_URL}})\"\n"
+                                f"rm_str=\"$(./scripts/checker.sh overflow {package_name} ${{{{ matrix.distro }}}} ${{{{ matrix.architecture }}}} {overflow} ${{REPO_URL}})\"\n"
                                 f"if [ -n \"${{rm_str}}\" ]; then\n  echo \"Removing ${{rm_str}}...\"\n"
                                 f"  curl -X DELETE -H 'Content-Type: application/json' --data \"{{\\\"PackageRefs\\\": [${{rm_str}}]}}\" \"${{REPO_URL}}\" | jq\nfi\n"
                                 f"curl -X POST -F file=@out/${{{{ env.DEBNAME }}}} \"http://localhost:${{LOCAL_PORT}}/api/files/${{{{ matrix.distro }}}}\" | jq\n"
@@ -152,12 +154,14 @@ def gen_workflows():
 
         print(f"Generated {output_file}")
 
-def get_architectures_from_api(pkg_name):
+def get_api_data(pkg_name):
     response = requests.get(f"https://pacstall.dev/api/packages/{pkg_name}")
     if response.status_code != 200:
         raise ValueError(f"Failed to fetch data for package '{pkg_name}'")
 
-    archopts = response.json().get("architectures", [])
+    api_data = response.json()
+    last_updated = api_data.get("lastUpdatedAt")
+    archopts = api_data.get("architectures")
 
     archarr = []
     if "arm64" in archopts or "aarch64" in archopts:
@@ -169,12 +173,12 @@ def get_architectures_from_api(pkg_name):
     elif "any" in archopts:
         archarr = ["amd64", "arm64"]
 
-    return archarr
+    return last_updated, archarr
 
-def add_or_update_package(name, distros, architectures):
+def add_or_update_package(name, distros, architectures, overflow):
     data = load_database()
     try:
-        available_architectures = get_architectures_from_api(name)
+        last_updated, available_architectures = get_api_data(name)
     except ValueError as e:
         print(e)
         return
@@ -188,7 +192,9 @@ def add_or_update_package(name, distros, architectures):
 
     data[name] = {
         "distros": distros,
-        "architectures": architectures
+        "architectures": architectures,
+        "lastUpdatedAt": last_updated,
+        "maxOverflow": overflow,
     }
 
     save_database(data)
@@ -211,6 +217,8 @@ def main():
                             help="Comma-separated list of distros (e.g., ubuntu-latest,debian-stable)")
     add_parser.add_argument("-a", "--architectures", required=True,
                             help="Comma-separated list of architectures (e.g., amd64,arm64)")
+    add_parser.add_argument("-o", "--overflow", required=False, type=int, default=5,
+                            help="Integer value of the overflow limit (default 5)")
 
     remove_parser = subparsers.add_parser("remove", help="Remove a package")
     remove_parser.add_argument("name", help="Package name")
@@ -236,7 +244,7 @@ def main():
             print(f"Valid architectures are: {', '.join(valid_architectures)}")
             return
 
-        add_or_update_package(args.name, distros, architectures)
+        add_or_update_package(args.name, distros, architectures, args.overflow)
 
     elif args.command == "remove":
         remove_package(args.name)

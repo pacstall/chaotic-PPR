@@ -13,18 +13,18 @@ cd chaotic-PPR
 
 # set up the user for hosting
 mkdir -p ~/.aptly/public
-sed -i "s/\${USER}/${USER}/g" aptly-api.service apache2/aptly.conf
+sed -i "s/\${USER}/${USER}/g" server/systemd/aptly-api.service server/apache2/aptly.conf
 chmod -R o+r ~/.aptly/public
 chmod o+x ~/
 chmod o+x ~/.aptly
-cp ppr-public-key.asc ~/.aptly/public
+cp server/ppr-public-key.asc ~/.aptly/public
 
 # enable and start aptly api
-sudo cp aptly-api.service /etc/systemd/system/
+sudo cp server/systemd/aptly-api.service /etc/systemd/system/
 sudo systemctl enable --now aptly-api
 
 # enable and start apache forwarding
-sudo cp apache2/aptly.conf /etc/apache2/sites-available/aptly.conf
+sudo cp server/apache2/aptly.conf /etc/apache2/sites-available/aptly.conf
 sudo a2ensite aptly.conf
 sudo systemctl reload apache2
 sudo systemctl enable apache2 --now

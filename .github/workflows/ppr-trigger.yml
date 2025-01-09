@@ -16,12 +16,19 @@ jobs:
       - name: Build Matrix
         id: parse-log
         run: |
+          needed=0
           updates_matrix="$(git log -1 --pretty=%b | awk '/^Update/,0 { if ($0 ~ /^  /) { sub(/:$/, "", $1); print $1 } }' | jq -R -s -c 'split("\n") | map(select(. != ""))')"
           echo "updated='${updates_matrix}'" >> $GITHUB_ENV
-          echo "${updates_matrix}"
+          if [[ ${updates_matrix} == "[]" ]]; then
+            echo "needed=0" >> $GITHUB_ENV
+            exit 0
+          else
+            echo "needed=1" >> $GITHUB_ENV
+            echo "${updates_matrix}"
+          fi
 
       - name: Trigger Workflows
-        if: env.updated != '[]'
+        if: env.needed == '1'
         run: |
           for package in $(echo ${{ env.updated }} | jq -r '.[]'); do
             curl -X POST \
