@@ -21,14 +21,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Pacstall. If not, see <https://www.gnu.org/licenses/>.
 
+# @description
+#   Checks for updates to packages from the Pacsite API.
+#   If updates are found, returns a git description to be
+#   logged, and updates the database file with the new data.
+# @ci
+#
+# @example
+#   check_updates packages.json
+# @args
+#    $1 string The package database file.
 function check_updates() {
-  local pkgfile="${1}" updfile="${2}" packages details updated stored
+  local pkgfile="${1}" packages details updated stored
   mapfile -t packages < <(jq -r 'keys[]' "${pkgfile}")
   for i in "${packages[@]}"; do
     updated="$(curl -fsSL https://pacstall.dev/api/packages/${i} | jq -r '.lastUpdatedAt')"
-    stored="$(jq -r --arg pkg ${i} '.[$pkg] // "1970-01-01T00:00:00Z"' ${updfile})"
+    stored="$(jq -r --arg pkg ${i} '.[$pkg].lastUpdatedAt' ${pkgfile})"
     if [[ "${updated}" > "${stored}" ]]; then
-      jq --arg pkg "${i}" --arg time "${updated}" '.[$pkg] = $time' "${updfile}" > tmp.json && mv tmp.json "${updfile}"
+      jq --arg pkg "${i}" --arg time "${updated}" \
+        '.[$pkg].lastUpdatedAt = $time' "${pkgfile}" > tmp.json && mv tmp.json "${pkgfile}"
       details+=("${i}: ${stored} -> ${updated}")
     fi
   done
@@ -40,4 +51,40 @@ function check_updates() {
   fi
 }
 
-check_updates "${1}" "${2}"
+# @description
+#   Checks a bound local aptly repo API for overflow
+#   versions of a package. Returns any packages to be
+#   removed to make space for an incoming build.
+# @ci
+#
+# @example
+#   check_overflow foobar main amd64 5 \
+#     http://localhost:1234/api/repos/ppr-main/packages
+# @args
+#    $1 string The package to check overflow of.
+#    $2 string The component repo to check.
+#    $3 string The architecture to check.
+#    $4 int    The maximum number of packages allowed.
+#    $5 string The local API url.
+function check_overflow() {
+  local package="${1}" repo="${2}" architecture="${3}" max="${4}" url="${5}" responses matches removes remove_ref
+  mapfile -t responses < <(curl -s "${url}?q=${package}" | jq -r ".[]" | sort -r)
+  for i in "${responses[@]}"; do
+    [[ "${i}" == "P${architecture}"* ]] && matches+=("${i}")
+  done
+  if ((${#matches[@]}>=max)); then
+    for i in "${!matches[@]}"; do
+      ((i>=max-1)) && removes+=("${matches[${i}]}")
+    done
+  fi
+  if [[ -n ${removes[*]} ]]; then
+    printf -v remove_ref '\"%s\",' "${removes[@]}"
+    echo "${remove_ref%,}"
+  fi
+}
+
+case ${1} in
+  updates) shift 1; check_updates "${1:?PKGFILE required}" ;;
+  overflow) shift 1; check_overflow "${1:?need PKG}" "${2:?need REPO}" "${3:?need ARCH}" "${4:?need MAX}" "${5:?need URL}" ;;
+  *) echo "Usage: ${0} updates|overflow"; exit 1 ;;
+esac

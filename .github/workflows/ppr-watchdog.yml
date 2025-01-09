@@ -8,6 +8,9 @@ on:
   schedule:
     - cron: "0 */6 * * *"
   workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   update-check:
@@ -20,10 +23,9 @@ jobs:
           ref: master
 
       - name: Check for updates from API
-        id: update-json
         run: |
           needed=0
-          updates="$(./scripts/checker.sh packages.json updates.json)"
+          updates="$(./scripts/checker.sh updates packages.json)"
           if [[ "${updates}" == "No PPR updates found." ]];  then
             echo "No PPR updates found."
             echo "needed=0" >> $GITHUB_ENV
@@ -40,7 +42,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          add-paths: updates.json
+          add-paths: packages.json
           base: master
           branch: watchdog
           title: "Bump timestamps from API"

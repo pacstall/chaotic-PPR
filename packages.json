@@ -1,19 +1,23 @@
 {
-    "nushell-bin": {
-        "distros": [
-            "main"
-        ],
-        "architectures": [
-            "amd64",
-            "arm64"
-        ]
-    },
-    "pacstall": {
-        "distros": [
-            "main"
-        ],
-        "architectures": [
-            "all"
-        ]
-    }
+  "nushell-bin": {
+    "distros": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "lastUpdatedAt": "2025-01-01T23:11:21Z",
+    "maxOverflow": 5
+  },
+  "pacstall": {
+    "distros": [
+      "main"
+    ],
+    "architectures": [
+      "all"
+    ],
+    "lastUpdatedAt": "2024-12-30T06:51:48Z",
+    "maxOverflow": 5
+  }
 }
