@@ -20,8 +20,13 @@ chmod o+x ~/.aptly
 cp server/ppr-public-key.asc ~/.aptly/public
 
 # enable and start aptly api
+APTLY_PORT=1234 # can be anything besides 8080, that's for CI to use
+sed -i "s/\${APTLY_PORT}/${APTLY_PORT}/g" server/systemd/aptly-api.service
 sudo cp server/systemd/aptly-api.service /etc/systemd/system/
 sudo systemctl enable --now aptly-api
+
+# set up aptly repos
+./scripts/creator.sh "${APTLY_PORT}"
 
 # enable and start apache forwarding
 sudo cp server/apache2/aptly.conf /etc/apache2/sites-available/aptly.conf
@@ -31,11 +36,9 @@ sudo systemctl enable apache2 --now
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 sudo certbot --apache -d ppr.pacstall.dev
-
-# set up aptly repos
-./scripts/creator.sh
 ```
 Then, set the following repository secrets for GitHub Actions:
+- Set the chosen `APTLY_PORT` from above
 - Generate an ssh keygen pair and set `SSH_USER`, `SSH_IP`, and `SSH_KEY`:
   - `SSH_USER` - the host user
   - `SSH_IP` - the IP of the server

@@ -129,7 +129,7 @@ def gen_workflows():
                             "run": LiteralString(
                                 f"LOCATION=\"${{{{ secrets.SSH_USER }}}}@${{{{ secrets.SSH_IP }}}}\"\n"
                                 f"LOCAL_PORT=8080\n"
-                                f"REMOTE_PORT=8088\n"
+                                f"REMOTE_PORT=${{{{ secrets.APTLY_PORT }}}}\n"
                                 f"REPO_URL=\"http://localhost:${{LOCAL_PORT}}/api/repos/ppr-${{{{ matrix.distro }}}}/packages\"\n"
                                 f"ssh -i ~/.ssh/id_ed25519 -fN -L ${{LOCAL_PORT}}:localhost:${{REMOTE_PORT}} \"${{LOCATION}}\"\n"
                                 f"rm_str=\"$(./scripts/checker.sh overflow {package_name} ${{{{ matrix.distro }}}} ${{{{ matrix.architecture }}}} {overflow} ${{REPO_URL}})\"\n"
