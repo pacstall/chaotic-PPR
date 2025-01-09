@@ -73,7 +73,21 @@ gpg --armor --export-secret-keys "PPR" > ppr-private-key.asc
 
 The main server is now set up and ready to accept and publish packages.
 
-To set up the landing page, create a static build from https://github.com/pacstall/chaotic-ppr-landing, and place the files in `~/.aptly/public`.
+To set up the [landing page](https://github.com/pacstall/chaotic-ppr-landing.git):
+```bash
+git clone https://github.com/pacstall/chaotic-ppr-landing.git
+# Install npm
+sudo apt install npm
+# Install pnpm (Optional, but preferred):
+sudo npm install -g pnpm
+
+pnpm i && pnpm build
+# OR
+npm i && npm run build
+
+cp -r out/* ~/.aptly/public
+```
+
 
 Jumpstart (for mirrors):
 ```bash
