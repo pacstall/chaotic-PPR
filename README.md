@@ -36,7 +36,7 @@ sudo certbot --apache -d ppr.pacstall.dev
 ./scripts/creator.sh
 ```
 Then, set the following repository secrets for GitHub Actions:
-- generate an ssh keygen pair and set `SSH_USER`, `SSH_IP`, and `SSH_KEY`:
+- Generate an ssh keygen pair and set `SSH_USER`, `SSH_IP`, and `SSH_KEY`:
   - `SSH_USER` - the host user
   - `SSH_IP` - the IP of the server
   - `SSH_KEY` - the contents of the generated `ppr_ssh_key` file:
@@ -45,9 +45,14 @@ ssh-keygen -t ed25519 -C "github-actions@ppr" -f ppr_ssh_key < /dev/null
 cat ppr_ssh_key.pub >> ~/.ssh/authorized_keys
 ```
 
-- get the `keyid` from `ppr-public-key.asc` and set it to `GPG_KEY`:
+- Get the `keyid` from `ppr-public-key.asc` and set it to `GPG_KEY`:
 ```bash
-gpg --list-packets ppr-public-key.asc | awk '/keyid: / {print $2}'
+gpg --list-packets server/ppr-public-key.asc | awk '/keyid: / {print $2}'
+```
+
+- On the server, import the private GPG key (get from maintainers):
+```bash
+gpg --import ppr-private-key.asc
 ```
 
 If the GPG key ever needs to be regenerated:
