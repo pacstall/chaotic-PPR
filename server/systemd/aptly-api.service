@@ -3,7 +3,7 @@ Description=Aptly API Service
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/aptly api serve -listen=:8088
+ExecStart=/usr/bin/aptly api serve -listen=:${APTLY_PORT}
 WorkingDirectory=/home/${USER}/.aptly
 User=${USER}
 Restart=on-failure
