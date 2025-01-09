@@ -20,7 +20,7 @@ chmod o+x ~/.aptly
 cp server/ppr-public-key.asc ~/.aptly/public
 
 # enable and start aptly api
-APTLY_PORT=1234 # can be anything besides 8080, that's for CI to use
+APTLY_PORT=1234
 sed -i "s/\${APTLY_PORT}/${APTLY_PORT}/g" server/systemd/aptly-api.service
 sudo cp server/systemd/aptly-api.service /etc/systemd/system/
 sudo systemctl enable --now aptly-api
