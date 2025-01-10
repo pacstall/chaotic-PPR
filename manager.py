@@ -272,7 +272,7 @@ def handle_add(args):
             print(f"Error: Invalid architectures given: {', '.join(invalid_architectures)}")
             print(f"Valid architectures are: {', '.join(valid_architectures)}")
             return
-        if 'any' in architectures and 'all' in architectures:
+        if ('any' in architectures or 'all' in architectures) and len(architectures) > 1:
             print(f"Error: 'any' and 'all' are mutually exclusive.")
             return
     else:
