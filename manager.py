@@ -23,8 +23,30 @@ valid_architectures = ["all", "any", "amd64", "arm64"]
 
 def adjust_architectures(architectures):
     if "any" in architectures:
-        return ["amd64", "arm64"]
+        return [arch for arch in valid_architectures if arch not in {"all", "any"}]
     return architectures
+
+def get_api_data(pkg_name):
+    response = requests.get(f"https://pacstall.dev/api/packages/{pkg_name}")
+    if response.status_code != 200:
+        print(f"Error: Failed to fetch data for package '{pkg_name}'")
+        return
+
+    api_data = response.json()
+    last_updated = api_data.get("lastUpdatedAt")
+    archopts = api_data.get("architectures")
+
+    archarr = []
+    if "arm64" in archopts or "aarch64" in archopts:
+        archarr.append("arm64")
+    if "amd64" in archopts or "x86_64" in archopts:
+        archarr.append("amd64")
+    if "all" in archopts:
+        archarr = ["all"]
+    elif "any" in archopts:
+        archarr = ["any"] + adjust_architectures(archopts)
+
+    return last_updated, archarr
 
 def load_database():
     if os.path.exists(DATABASE_FILE):
@@ -165,27 +187,6 @@ def gen_workflows():
     packages = load_database()
     for package_name, package_data in packages.items():
         gen_workflow(package_name, package_data)
-
-def get_api_data(pkg_name):
-    response = requests.get(f"https://pacstall.dev/api/packages/{pkg_name}")
-    if response.status_code != 200:
-        raise ValueError(f"Failed to fetch data for package '{pkg_name}'")
-
-    api_data = response.json()
-    last_updated = api_data.get("lastUpdatedAt")
-    archopts = api_data.get("architectures")
-
-    archarr = []
-    if "arm64" in archopts or "aarch64" in archopts:
-        archarr.append("arm64")
-    if "amd64" in archopts or "x86_64" in archopts:
-        archarr.append("amd64")
-    if "all" in archopts:
-        archarr = ["all"]
-    elif "any" in archopts:
-        archarr = ["any"] + adjust_architectures(archopts)
-
-    return last_updated, archarr
 
 def alter_package(name, distros, architectures, overflow=5):
     data = load_database()
