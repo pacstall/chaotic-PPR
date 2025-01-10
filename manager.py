@@ -220,8 +220,6 @@ def alter_package(name, distros, architectures, overflow=5):
     for arch in architectures:
         if arch not in available_architectures:
             print(f"Error: '{arch}' is not supported by package '{name}'\nSupported architectures: {', '.join(available_architectures)}")
-            if arch == 'any':
-                print("Note: 'any' packages must specify each arch to build")
             sys.exit(1)
 
     data[name] = {
