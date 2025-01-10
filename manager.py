@@ -42,7 +42,7 @@ def remove_package(name):
     if name in data:
         del data[name]
         save_database(data)
-        workflow_file = f"workflows/packages/{name}.yml"
+        workflow_file = f"workflows/pkg-{name}.yml"
         if os.path.exists(workflow_file):
             os.remove(workflow_file)
         print(f"Package '{name}' removed successfully.")
@@ -66,7 +66,7 @@ def list_packages():
         list_package(name, details)
 
 def gen_workflow(package_name, package_data):
-    os.makedirs("workflows/packages", exist_ok=True)
+    os.makedirs("workflows", exist_ok=True)
     distros = package_data["distros"]
     architectures = adjust_architectures(package_data["architectures"])
     overflow = package_data["maxOverflow"]
@@ -155,7 +155,7 @@ def gen_workflow(package_name, package_data):
 
     yaml_str = yaml.dump(workflow_template, sort_keys=False, default_flow_style=False)
     yaml_str = yaml_str.replace("run: |-", "run: |")
-    output_file = f"workflows/packages/{package_name}.yml"
+    output_file = f"workflows/pkg-{package_name}.yml"
     with open(output_file, "w") as f:
         f.write(yaml_str)
 
@@ -163,7 +163,6 @@ def gen_workflow(package_name, package_data):
 
 def gen_workflows():
     packages = load_database()
-    os.makedirs("workflows", exist_ok=True)
     for package_name, package_data in packages.items():
         gen_workflow(package_name, package_data)
 
