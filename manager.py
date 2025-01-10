@@ -262,6 +262,9 @@ def handle_add(args):
             print(f"Error: Invalid distros given: {', '.join(invalid_distros)}")
             print(f"Valid distros are: {', '.join(valid_distros)}")
             return
+        if 'main' in distros and len(distros) > 1:
+            print(f"Error: 'main' is mutually exclusive.")
+            return
     else:
         distros = None
 
