@@ -271,7 +271,6 @@ def handle_add(args):
         if 'any' in architectures and 'all' in architectures:
             print(f"Error: 'any' and 'all' are mutually exclusive.")
             return
-        architectures = adjust_architectures(architectures)
     else:
         architectures = None
 
