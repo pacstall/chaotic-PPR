@@ -221,9 +221,12 @@ def alter_package(name, distros, architectures, overflow=5):
             print(f"Error: '{arch}' is not supported by package '{name}'\nSupported architectures: {', '.join(available_architectures)}")
             sys.exit(1)
 
+    if 'any' in architectures:
+        architectures = ['any']
+
     data[name] = {
         "distros": distros,
-        "architectures": adjust_architectures(architectures),
+        "architectures": architectures,
         "maxOverflow": overflow,
         "lastUpdatedAt": last_updated,
     }
