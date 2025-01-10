@@ -30,7 +30,7 @@ def get_api_data(pkg_name):
     response = requests.get(f"https://pacstall.dev/api/packages/{pkg_name}")
     if response.status_code != 200:
         print(f"Error: Failed to fetch data for package '{pkg_name}'")
-        return
+        sys.exit(1)
 
     api_data = response.json()
     last_updated = api_data.get("lastUpdatedAt")
@@ -200,10 +200,10 @@ def alter_package(name, distros, architectures, overflow=5):
             missing = 1
             print(f"Error: missing 'architectures'")
         if (missing == 1):
-            return
+            sys.exit(1)
     if (overflow < 1):
         print(f"Error: 'overflow' must be 1 or greater")
-        return
+        sys.exit(1)
 
     if package_exists:
         current_data = data[name]
@@ -215,7 +215,7 @@ def alter_package(name, distros, architectures, overflow=5):
         last_updated, available_architectures = get_api_data(name)
     except ValueError as e:
         print(e)
-        return
+        sys.exit(1)
 
     for arch in architectures:
         if arch not in available_architectures:
@@ -242,7 +242,7 @@ def add_command(subparsers, name, aliases, help_text, arguments):
     handler = globals().get(f"handle_{name}")
     if handler is None:
         print(f"Error: No handler defined for command '{name}'")
-        return
+        sys.exit(1)
     parser = subparsers.add_parser(name, help=f"{help_text} {{aliases: {'|'.join(aliases)}}}")
     for arg_name, arg_kwargs in arguments.items():
         parser.add_argument(arg_name, **arg_kwargs)
@@ -261,10 +261,10 @@ def handle_add(args):
         if invalid_distros:
             print(f"Error: Invalid distros given: {', '.join(invalid_distros)}")
             print(f"Valid distros are: {', '.join(valid_distros)}")
-            return
+            sys.exit(1)
         if 'main' in distros and len(distros) > 1:
             print(f"Error: 'main' is mutually exclusive.")
-            return
+            sys.exit(1)
     else:
         distros = None
 
@@ -274,10 +274,10 @@ def handle_add(args):
         if invalid_architectures:
             print(f"Error: Invalid architectures given: {', '.join(invalid_architectures)}")
             print(f"Valid architectures are: {', '.join(valid_architectures)}")
-            return
+            sys.exit(1)
         if ('any' in architectures or 'all' in architectures) and len(architectures) > 1:
             print(f"Error: 'any' and 'all' are mutually exclusive.")
-            return
+            sys.exit(1)
     else:
         architectures = None
 
