@@ -7,8 +7,8 @@
       "amd64",
       "arm64"
     ],
-    "lastUpdatedAt": "2025-01-01T23:11:21Z",
-    "maxOverflow": 5
+    "maxOverflow": 5,
+    "lastUpdatedAt": "2025-01-01T23:11:21Z"
   },
   "pacstall": {
     "distros": [
@@ -17,7 +17,7 @@
     "architectures": [
       "all"
     ],
-    "lastUpdatedAt": "2024-12-30T06:51:48Z",
-    "maxOverflow": 5
+    "maxOverflow": 5,
+    "lastUpdatedAt": "2024-12-30T06:51:48Z"
   }
 }
