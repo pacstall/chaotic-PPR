@@ -6,12 +6,13 @@ name: pacstall
   workflow_dispatch: {}
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
         - distro: main
           architecture: all
+          runner: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     steps:
     - name: Init
       uses: actions/checkout@v4

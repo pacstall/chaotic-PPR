@@ -114,7 +114,11 @@ def gen_workflow(package_name, package_data):
     architectures = adjust_architectures(package_data["architectures"])
     overflow = package_data["maxOverflow"]
     matrix_combinations = [
-        {"distro": distro, "architecture": arch}
+        {
+            "distro": distro,
+            "architecture": arch,
+            "runner": "ubuntu-24.04-arm" if arch == "arm64" else "ubuntu-latest"
+        }
         for distro, arch in itertools.product(distros, architectures)
     ]
 
@@ -130,12 +134,12 @@ def gen_workflow(package_name, package_data):
         },
         "jobs": {
             "build": {
-                "runs-on": "ubuntu-latest",
                 "strategy": {
                     "matrix": {
                         "include": matrix_combinations
                     }
                 },
+                "runs-on": "${{ matrix.runner }}",
                 "steps": [
                     {
                         "name": "Init",

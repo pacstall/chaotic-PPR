@@ -6,14 +6,16 @@ name: nushell-bin
   workflow_dispatch: {}
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
         - distro: main
           architecture: amd64
+          runner: ubuntu-latest
         - distro: main
           architecture: arm64
+          runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
     steps:
     - name: Init
       uses: actions/checkout@v4
