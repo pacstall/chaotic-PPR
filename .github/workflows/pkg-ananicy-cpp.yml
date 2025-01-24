@@ -1,0 +1,59 @@
+name: ananicy-cpp
+'on':
+  repository_dispatch:
+    types:
+    - ananicy-cpp
+  workflow_dispatch: {}
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+        - distro: main
+          architecture: amd64
+          runner: ubuntu-latest
+        - distro: main
+          architecture: arm64
+          runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+    - name: Init
+      uses: actions/checkout@v4
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H "${{ secrets.SSH_IP }}" >> ~/.ssh/known_hosts
+    - name: Package
+      run: |
+        mkdir -p out && cd out
+        m_name="ananicy-cpp"
+        m_dist="${{ matrix.distro }}"
+        m_arch="${{ matrix.architecture }}"
+        ../scripts/packer.sh "${m_name}" "${m_dist}" "${m_arch}"
+        debfile=(*${m_arch}.deb)
+        echo "DEBNAME=${debfile}" >> $GITHUB_ENV
+    - name: Upload .deb files
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.DEBNAME }}@${{ matrix.distro }}
+        path: out/${{ env.DEBNAME }}
+    - name: Upload to server
+      run: |
+        LOCATION="${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }}"
+        LOCAL_PORT=8080
+        REMOTE_PORT=${{ secrets.APTLY_PORT }}
+        REPO_URL="http://localhost:${LOCAL_PORT}/api/repos/ppr-${{ matrix.distro }}/packages"
+        ssh -i ~/.ssh/id_ed25519 -fN -L ${LOCAL_PORT}:localhost:${REMOTE_PORT} "${LOCATION}"
+        rm_str="$(./scripts/checker.sh overflow ananicy-cpp ${{ matrix.distro }} ${{ matrix.architecture }} 5 ${REPO_URL})"
+        if [ -n "${rm_str}" ]; then
+          echo "Removing ${rm_str}..."
+          curl -X DELETE -H 'Content-Type: application/json' --data "{\"PackageRefs\": [${rm_str}]}" "${REPO_URL}" | jq
+        fi
+        curl -X POST -F file=@out/${{ env.DEBNAME }} "http://localhost:${LOCAL_PORT}/api/files/${{ matrix.distro }}" | jq
+        curl -s -X POST -H 'Content-Type: application/json' \
+          "http://localhost:${LOCAL_PORT}/api/repos/ppr-${{ matrix.distro }}/file/${{ matrix.distro }}?forceReplace=1" | jq
+        curl -X PUT -H 'Content-Type: application/json' --data '{"Signing": {"Skip": false, "GpgKey": "${{ secrets.GPG_KEY }}"}, "MultiDist": true, "ForceOverwrite": true}' "http://localhost:${LOCAL_PORT}/api/publish/pacstall/pacstall" | jq

@@ -19,5 +19,16 @@
     ],
     "maxOverflow": 5,
     "lastUpdatedAt": "2025-01-14T20:15:52Z"
+  },
+  "ananicy-cpp": {
+    "distros": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "maxOverflow": 5,
+    "lastUpdatedAt": "2024-12-29T02:31:06Z"
   }
 }
