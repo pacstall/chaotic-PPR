@@ -1,0 +1,3 @@
+[submodule "chaotic-ppr-landing"]
+	path = chaotic-ppr-landing
+	url = https://github.com/pacstall/chaotic-ppr-landing.git

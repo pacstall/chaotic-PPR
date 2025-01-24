@@ -8,7 +8,7 @@ Requirements:
 
 Jumpstart (only for the main host):
 ```bash
-git clone https://github.com/pacstall/chaotic-PPR.git
+git clone --recurse-submodules https://github.com/pacstall/chaotic-PPR.git
 cd chaotic-PPR
 
 # set up the user for hosting
@@ -78,11 +78,12 @@ The main server is now set up and ready to accept and publish packages.
 
 To set up the [landing page](https://github.com/pacstall/chaotic-ppr-landing.git):
 ```bash
-git clone https://github.com/pacstall/chaotic-ppr-landing.git
 # Install npm
 sudo apt install npm
 # Install pnpm (Optional, but preferred):
 sudo npm install -g pnpm
+
+cd chaotic-ppr-landing/
 
 pnpm i && pnpm build
 # OR
@@ -120,8 +121,3 @@ python3 manager.py remove ${package}
 
 python3 manager.py generate
 ```
-
-
-
-
-
