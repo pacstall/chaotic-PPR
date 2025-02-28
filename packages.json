@@ -30,5 +30,16 @@
     ],
     "maxOverflow": 5,
     "lastUpdatedAt": "2024-12-29T02:31:06Z"
+  },
+  "emacs": {
+    "distros": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "maxOverflow": 5,
+    "lastUpdatedAt": "2025-02-25T03:10:54Z"
   }
 }
