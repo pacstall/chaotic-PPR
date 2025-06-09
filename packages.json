@@ -41,5 +41,15 @@
     ],
     "maxOverflow": 5,
     "lastUpdatedAt": "2025-02-25T03:10:54Z"
+  },
+  "nerd-fonts": {
+    "distros": [
+      "main"
+    ],
+    "architectures": [
+      "all"
+    ],
+    "maxOverflow": 1,
+    "lastUpdatedAt": "2025-05-01T21:40:30Z"
   }
 }
