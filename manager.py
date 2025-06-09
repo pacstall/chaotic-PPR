@@ -152,10 +152,10 @@ def gen_workflow(package_name, package_data):
                     {
                         "name": "Set up SSH key",
                         "run": LiteralString(
-                            f"mkdir -p ~/.ssh\n"
-                            f"echo \"${{{{ secrets.SSH_KEY }}}}\" > ~/.ssh/id_ed25519\n"
-                            f"chmod 600 ~/.ssh/id_ed25519\n"
-                            f"ssh-keyscan -H \"${{{{ secrets.SSH_IP }}}}\" >> ~/.ssh/known_hosts"
+                            "mkdir -p ~/.ssh\n"
+                            "echo \"${{ secrets.SSH_KEY }}\" > ~/.ssh/id_ed25519\n"
+                            "chmod 600 ~/.ssh/id_ed25519\n"
+                            "ssh-keyscan -H \"${{ secrets.SSH_IP }}\" >> ~/.ssh/known_hosts"
                         )
                     },
                     {
@@ -166,16 +166,22 @@ def gen_workflow(package_name, package_data):
                             f"m_dist=\"${{{{ matrix.distro }}}}\"\n"
                             f"m_arch=\"${{{{ matrix.architecture }}}}\"\n"
                             f"../scripts/packer.sh \"${{m_name}}\" \"${{m_dist}}\" \"${{m_arch}}\"\n"
-                            "debfile=(*${m_arch}.deb)\n"
-                            "echo \"DEBNAME=${debfile}\" >> $GITHUB_ENV"
+                            f"debfiles=(*.deb)\n"
+                            f"if [ ${{#debfiles[@]}} -gt 1 ]; then\n"
+                            f"  echo \"DEBNAME=${{m_name}}:${{m_arch}}@${{m_dist}}\" >> $GITHUB_ENV\n"
+                            f"  echo \"DEBPATH=out\" >> $GITHUB_ENV\n"
+                            f"else\n"
+                            f"  echo \"DEBNAME=${{debfiles[0]}}\" >> $GITHUB_ENV\n"
+                            f"  echo \"DEBPATH=out/${{debfiles[0]}}\" >> $GITHUB_ENV\n"
+                            f"fi"
                         )
                     },
                     {
                         "name": "Upload .deb files",
                         "uses": "actions/upload-artifact@v4",
                         "with": {
-                            "name": "${{ env.DEBNAME }}@${{ matrix.distro }}",
-                            "path": "out/${{ env.DEBNAME }}"
+                            "name": "${{ env.DEBNAME }}",
+                            "path": "${{ env.DEBPATH }}"
                         }
                     },
                     {
@@ -186,10 +192,12 @@ def gen_workflow(package_name, package_data):
                             f"REMOTE_PORT=${{{{ secrets.APTLY_PORT }}}}\n"
                             f"REPO_URL=\"http://localhost:${{LOCAL_PORT}}/api/repos/ppr-${{{{ matrix.distro }}}}/packages\"\n"
                             f"ssh -i ~/.ssh/id_ed25519 -fN -L ${{LOCAL_PORT}}:localhost:${{REMOTE_PORT}} \"${{LOCATION}}\"\n"
-                            f"rm_str=\"$(./scripts/checker.sh overflow {package_name} ${{{{ matrix.distro }}}} ${{{{ matrix.architecture }}}} {overflow} ${{REPO_URL}})\"\n"
-                            f"if [ -n \"${{rm_str}}\" ]; then\n  echo \"Removing ${{rm_str}}...\"\n"
-                            f"  curl -X DELETE -H 'Content-Type: application/json' --data \"{{\\\"PackageRefs\\\": [${{rm_str}}]}}\" \"${{REPO_URL}}\" | jq\nfi\n"
-                            f"curl -X POST -F file=@out/${{{{ env.DEBNAME }}}} \"http://localhost:${{LOCAL_PORT}}/api/files/${{{{ matrix.distro }}}}\" | jq\n"
+                            f"children=($(curl -fsSL https://pacstall.dev/api/packages/{package_name} | jq -r '.baseChildren[]'))\n"
+                            f"if [ ${{#children[@]}} -le 1 ]; then\n  children=(\"{package_name}\")\nfi\nfor i in \"${{children[@]}}\"; do\n"
+                            f"  unset rm_str\n  rm_str=\"$(./scripts/checker.sh overflow {package_name} ${{{{ matrix.distro }}}} ${{{{ matrix.architecture }}}} {overflow} ${{REPO_URL}})\"\n"
+                            f"  if [ -n \"${{rm_str}}\" ]; then\n    echo \"Removing ${{rm_str}}...\"\n"
+                            f"    curl -X DELETE -H 'Content-Type: application/json' --data \"{{\\\"PackageRefs\\\": [${{rm_str}}]}}\" \"${{REPO_URL}}\" | jq\n  fi\ndone\n"
+                            f"for i in out/*.deb; do curl -X POST -F file=@${{i}} \"http://localhost:${{LOCAL_PORT}}/api/files/${{{{ matrix.distro }}}}\" | jq; done\n"
                             f"curl -s -X POST -H 'Content-Type: application/json' \\\n"
                             f"  \"http://localhost:${{LOCAL_PORT}}/api/repos/ppr-${{{{ matrix.distro }}}}/file/${{{{ matrix.distro }}}}?forceReplace=1\" | jq\n"
                             f"curl -X PUT -H 'Content-Type: application/json' --data '{{\"Signing\": {{\"Skip\": false, \"GpgKey\": \"${{{{ secrets.GPG_KEY }}}}\"}}, \"MultiDist\": true, \"ForceOverwrite\": true}}' \"http://localhost:${{LOCAL_PORT}}/api/publish/pacstall/pacstall\" | jq\n"

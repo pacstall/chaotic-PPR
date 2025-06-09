@@ -96,7 +96,7 @@ packer() {
     docker run --net=host --privileged "ghcr.io/pacstall/${dist}${target}" bash -c "mkdir -p out && cd out && pacstall -PBINs ${pkg}" \
     && container="$(docker ps -lq)" \
     && docker cp "${container}":/home/pacstall/out/. . \
-    && echo -e "[${BCyan}⌘${NC}] ${BOLD}PACK${NC}: deb for ${BPurple}${pkg}${NC}/${BLUE}${dist/-/:}${NC}/${CYAN}${a}${NC} built at ${BGreen}${PWD}${NC}" \
+    && echo -e "[${BCyan}⌘${NC}] ${BOLD}PACK${NC}: deb(s) for ${BPurple}${pkg}${NC}/${BLUE}${dist/-/:}${NC}/${CYAN}${a}${NC} built at ${BGreen}${PWD}${NC}" \
     && docker rm "${container}" &> /dev/null
   done
 }
