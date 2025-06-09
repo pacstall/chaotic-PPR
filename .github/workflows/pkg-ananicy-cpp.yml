@@ -39,7 +39,7 @@ jobs:
           echo "DEBNAME=${m_name}:${m_arch}@${m_dist}" >> $GITHUB_ENV
           echo "DEBPATH=out" >> $GITHUB_ENV
         else
-          echo "DEBNAME=${debfiles[0]}" >> $GITHUB_ENV
+          echo "DEBNAME=${debfiles[0]}@${m_dist}" >> $GITHUB_ENV
           echo "DEBPATH=out/${debfiles[0]}" >> $GITHUB_ENV
         fi
     - name: Upload .deb files

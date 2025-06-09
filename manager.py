@@ -171,7 +171,7 @@ def gen_workflow(package_name, package_data):
                             f"  echo \"DEBNAME=${{m_name}}:${{m_arch}}@${{m_dist}}\" >> $GITHUB_ENV\n"
                             f"  echo \"DEBPATH=out\" >> $GITHUB_ENV\n"
                             f"else\n"
-                            f"  echo \"DEBNAME=${{debfiles[0]}}\" >> $GITHUB_ENV\n"
+                            f"  echo \"DEBNAME=${{debfiles[0]}}@${{m_dist}}\" >> $GITHUB_ENV\n"
                             f"  echo \"DEBPATH=out/${{debfiles[0]}}\" >> $GITHUB_ENV\n"
                             f"fi"
                         )
