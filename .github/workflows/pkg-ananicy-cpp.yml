@@ -60,7 +60,7 @@ jobs:
         fi
         for i in "${children[@]}"; do
           unset rm_str
-          rm_str="$(./scripts/checker.sh overflow ananicy-cpp ${{ matrix.distro }} ${{ matrix.architecture }} 5 ${REPO_URL})"
+          rm_str="$(./scripts/checker.sh overflow ${i} ${{ matrix.distro }} ${{ matrix.architecture }} 5 ${REPO_URL})"
           if [ -n "${rm_str}" ]; then
             echo "Removing ${rm_str}..."
             curl -X DELETE -H 'Content-Type: application/json' --data "{\"PackageRefs\": [${rm_str}]}" "${REPO_URL}" | jq

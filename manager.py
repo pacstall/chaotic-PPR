@@ -194,7 +194,7 @@ def gen_workflow(package_name, package_data):
                             f"ssh -i ~/.ssh/id_ed25519 -fN -L ${{LOCAL_PORT}}:localhost:${{REMOTE_PORT}} \"${{LOCATION}}\"\n"
                             f"children=($(curl -fsSL https://pacstall.dev/api/packages/{package_name} | jq -r '.baseChildren[]'))\n"
                             f"if [ ${{#children[@]}} -le 1 ]; then\n  children=(\"{package_name}\")\nfi\nfor i in \"${{children[@]}}\"; do\n"
-                            f"  unset rm_str\n  rm_str=\"$(./scripts/checker.sh overflow {package_name} ${{{{ matrix.distro }}}} ${{{{ matrix.architecture }}}} {overflow} ${{REPO_URL}})\"\n"
+                            f"  unset rm_str\n  rm_str=\"$(./scripts/checker.sh overflow ${{i}} ${{{{ matrix.distro }}}} ${{{{ matrix.architecture }}}} {overflow} ${{REPO_URL}})\"\n"
                             f"  if [ -n \"${{rm_str}}\" ]; then\n    echo \"Removing ${{rm_str}}...\"\n"
                             f"    curl -X DELETE -H 'Content-Type: application/json' --data \"{{\\\"PackageRefs\\\": [${{rm_str}}]}}\" \"${{REPO_URL}}\" | jq\n  fi\ndone\n"
                             f"for i in out/*.deb; do curl -X POST -F file=@${{i}} \"http://localhost:${{LOCAL_PORT}}/api/files/${{{{ matrix.distro }}}}\" | jq; done\n"
