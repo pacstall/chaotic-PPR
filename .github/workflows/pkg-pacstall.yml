@@ -16,8 +16,10 @@ jobs:
     steps:
     - name: Clear out space
       run: |
+        echo 'Pre-cleanup:'
         df -h
         rm -rf /opt/hostedtoolcache
+        echo 'Post-cleanup:'
         df -h
     - name: Init
       uses: actions/checkout@v4

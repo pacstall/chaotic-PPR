@@ -144,8 +144,10 @@ def gen_workflow(package_name, package_data):
                     {
                         "name": "Clear out space",
                         "run": LiteralString(
+                            "echo 'Pre-cleanup:'\n"
                             "df -h\n"
                             "rm -rf /opt/hostedtoolcache\n"
+                            "echo 'Post-cleanup:'\n"
                             "df -h"
                         )
                     },
