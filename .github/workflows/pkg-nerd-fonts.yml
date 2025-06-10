@@ -15,7 +15,9 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
     - name: Clear out space
-      run: rm -rf /opt/hostedtoolcache
+      run: |
+        cd /opt
+        find . -maxdepth 1 -mindepth 1 '!' -path ./containerd '!' -path ./actionarchivecache '!' -path ./runner '!' -path ./runner-cache -exec rm -rf '{}' ';'
     - name: Init
       uses: actions/checkout@v4
     - name: Set up QEMU
