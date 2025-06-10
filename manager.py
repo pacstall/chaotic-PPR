@@ -142,6 +142,14 @@ def gen_workflow(package_name, package_data):
                 "runs-on": "${{ matrix.runner }}",
                 "steps": [
                     {
+                        "name": "Clear out space",
+                        "run": LiteralString(
+                            "df -h\n"
+                            "rm -rf /opt/hostedtoolcache\n"
+                            "df -h"
+                        )
+                    },
+                    {
                         "name": "Init",
                         "uses": "actions/checkout@v4"
                     },
@@ -168,7 +176,7 @@ def gen_workflow(package_name, package_data):
                             f"../scripts/packer.sh \"${{m_name}}\" \"${{m_dist}}\" \"${{m_arch}}\"\n"
                             f"debfiles=(*.deb)\n"
                             f"if [ ${{#debfiles[@]}} -gt 1 ]; then\n"
-                            f"  echo \"DEBNAME=${{m_name}}:${{m_arch}}@${{m_dist}}\" >> $GITHUB_ENV\n"
+                            f"  echo \"DEBNAME=${{m_name}}_${{m_arch}}@${{m_dist}}\" >> $GITHUB_ENV\n"
                             f"  echo \"DEBPATH=out\" >> $GITHUB_ENV\n"
                             f"else\n"
                             f"  echo \"DEBNAME=${{debfiles[0]}}@${{m_dist}}\" >> $GITHUB_ENV\n"
