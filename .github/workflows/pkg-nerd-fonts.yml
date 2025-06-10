@@ -14,6 +14,8 @@ jobs:
           runner: ubuntu-latest
     runs-on: ${{ matrix.runner }}
     steps:
+    - name: Clear out space
+      run: rm -rf /opt/hostedtoolcache
     - name: Init
       uses: actions/checkout@v4
     - name: Set up QEMU
