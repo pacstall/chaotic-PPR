@@ -51,5 +51,15 @@
     ],
     "maxOverflow": 1,
     "lastUpdatedAt": "2025-05-01T21:40:30Z"
+  },
+  "neovim": {
+    "distros": [
+      "main"
+    ],
+    "architectures": [
+      "any"
+    ],
+    "maxOverflow": 5,
+    "lastUpdatedAt": "2025-09-02T15:51:27Z"
   }
 }
