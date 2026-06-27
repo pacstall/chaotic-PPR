@@ -18,7 +18,7 @@
       "all"
     ],
     "maxOverflow": 5,
-    "lastUpdatedAt": "2026-05-04T01:16:13Z"
+    "lastUpdatedAt": "2026-06-27T01:26:11Z"
   },
   "ananicy-cpp": {
     "distros": [
@@ -29,7 +29,7 @@
       "arm64"
     ],
     "maxOverflow": 5,
-    "lastUpdatedAt": "2024-12-29T02:31:06Z"
+    "lastUpdatedAt": "2026-06-25T18:52:24Z"
   },
   "emacs": {
     "distros": [
@@ -60,6 +60,6 @@
       "any"
     ],
     "maxOverflow": 5,
-    "lastUpdatedAt": "2026-05-18T16:07:59Z"
+    "lastUpdatedAt": "2026-06-25T21:51:00Z"
   }
 }
