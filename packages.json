@@ -8,7 +8,7 @@
       "arm64"
     ],
     "maxOverflow": 5,
-    "lastUpdatedAt": "2025-08-03T00:00:17Z"
+    "lastUpdatedAt": "2026-07-05T19:51:51Z"
   },
   "pacstall": {
     "distros": [
@@ -18,7 +18,7 @@
       "all"
     ],
     "maxOverflow": 5,
-    "lastUpdatedAt": "2026-06-27T01:26:11Z"
+    "lastUpdatedAt": "2026-07-05T20:19:30Z"
   },
   "ananicy-cpp": {
     "distros": [
@@ -60,6 +60,6 @@
       "any"
     ],
     "maxOverflow": 5,
-    "lastUpdatedAt": "2026-06-25T21:51:00Z"
+    "lastUpdatedAt": "2026-07-05T20:10:25Z"
   }
 }
