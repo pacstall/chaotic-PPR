@@ -40,7 +40,7 @@
       "arm64"
     ],
     "maxOverflow": 5,
-    "lastUpdatedAt": "2025-12-19T14:43:07Z"
+    "lastUpdatedAt": "2026-08-24T14:30:11Z"
   },
   "nerd-fonts": {
     "distros": [
@@ -60,6 +60,6 @@
       "any"
     ],
     "maxOverflow": 5,
-    "lastUpdatedAt": "2026-07-05T20:10:25Z"
+    "lastUpdatedAt": "2026-08-23T19:04:20Z"
   }
 }
