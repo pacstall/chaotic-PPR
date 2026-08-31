@@ -181,7 +181,7 @@ step 2 "Deciding default components"
 decide_components
 
 step 3 "Downloading keyring to '/usr/share/keyrings/ppr-keyring.gpg'"
-download_stdout https://ppr.pacstall.dev/ppr-public-key.asc | sudo gpg --dearmor -o /usr/share/keyrings/ppr-keyring.gpg || catch
+download_stdout https://ppr.pacstall.dev/ppr-public-key.asc | sudo gpg --yes --dearmor -o /usr/share/keyrings/ppr-keyring.gpg || catch
 
 step 4 "Adding repository to '/etc/apt/sources.list.d/ppr.list'"
 echo "deb [signed-by=/usr/share/keyrings/ppr-keyring.gpg arch=${joined_archs%,}] https://ppr.pacstall.dev/pacstall/ pacstall ${chosen_components[*]}" | sudo tee /etc/apt/sources.list.d/ppr.list > /dev/null || catch
